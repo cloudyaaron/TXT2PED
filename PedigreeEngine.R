@@ -23,4 +23,4 @@ while( length(line) != 0 ) {
   print(line)
   line=readLines(con,n=1)
 }
-
+close(con)
