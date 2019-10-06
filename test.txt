@@ -2,3 +2,4 @@ A gender_is male
 A father_of B
 A name_is "John"
 A son_of C
+A partner_of D
