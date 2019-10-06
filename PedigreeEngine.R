@@ -16,8 +16,11 @@ if (length(args) == 0){
   stop("exit")
 }
 
-#reading the text file into DATA
-data <- read.table(args, row.names = NULL, header = FALSE , fill = TRUE)
-
-print(data)
+#reading each line of the text file 
+con <- file(args,"r")
+line <- readLines(con,n = 1)
+while( length(line) != 0 ) {
+  print(line)
+  line=readLines(con,n=1)
+}
 
