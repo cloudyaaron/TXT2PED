@@ -2,10 +2,12 @@
 
 
 #pasing the argument in to the rscript
-args = commandArgs(T)
+args <- commandArgs(T)
 if (length(args) == 0){
   print("$Usage Rsript PedigreeEngine.R sample.txt")
-  stop("exit")
+  args <- "E:\\study\\binf6112\\project\\test.txt"
+  #stop("exit")
+  
 }else if (length(args) == 1){
   print(length(args))
   print(args)
@@ -15,4 +17,7 @@ if (length(args) == 0){
 }
 
 #reading the text file into DATA
-data = read.table(args)
+data <- read.table(args, row.names = NULL, header = FALSE , fill = TRUE)
+
+print(data)
+

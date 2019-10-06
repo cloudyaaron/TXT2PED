@@ -1,1 +1,4 @@
-ID1 has_father ID3
+A is_male
+A father_of B
+A has_name "John"
+A son_of C
