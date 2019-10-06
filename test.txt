@@ -1,4 +1,4 @@
-A is_male
+A gender_is male
 A father_of B
-A has_name "John"
+A name_is "John"
 A son_of C

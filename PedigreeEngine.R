@@ -18,9 +18,29 @@ if (length(args) == 0){
 
 #reading each line of the text file 
 con <- file(args,"r")
+
+#read line one by one by the provindg file
 line <- readLines(con,n = 1)
 while( length(line) != 0 ) {
-  print(line)
+  
+  #if the line was describing a attributes
+  if (grepl("_is",line)== TRUE ){
+    print("attributes")
+    print(line)
+    
+    
+  #if the line was describing a relation
+  } else if(grepl("_of",line)== TRUE ){
+    print("relation")
+    print(line)
+  }#can have nore function
+  
+  
+  
+  
+  
+  #Set to nextline
   line=readLines(con,n=1)
 }
+#close connection to the file
 close(con)
