@@ -22,6 +22,11 @@ con <- file(args,"r")
 line <- readLines(con,n = 1)
 linenum <- 1
 ID <- 1
+
+#init dataframe
+df <- data.frame(ped=0,id=0,father=0,mother=0,sex=0,affected=0,ava=0,node=0,name=0,dob=0,partner=0,sg=0)
+print(df)
+
 while( length(line) != 0 ) {
   
   #if the line was describing a attributes
@@ -31,9 +36,12 @@ while( length(line) != 0 ) {
     aline <- unlist(strsplit(line," "))
     if(aline[2] == "gender_is"){
       
-    }else if(){
+    }else if(aline[2] == "name_is"){
       
     }
+    
+    #TO-DO
+    
     
   #if the line was describing a relation
   } else if(grepl("_of",line) == TRUE ){
@@ -42,9 +50,13 @@ while( length(line) != 0 ) {
     rline <- unlist(strsplit(line," "))
     if(rline[2] == "father_of"){
       
-    }else if(){
+    }else if(rline[2] == "mother_of"){
       
     }
+    
+    #TO-DO
+    
+    
     
     
   #alertuser error when line can not be understand
