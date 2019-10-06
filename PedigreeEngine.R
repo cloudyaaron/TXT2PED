@@ -24,18 +24,37 @@ linenum <- 1
 ID <- 1
 
 #init dataframe
-df <- data.frame(ped=0,id=0,father=0,mother=0,sex=0,affected=0,ava=0,node=0,name=0,dob=0,partner=0,sg=0)
-print(df)
+df <- data.frame(ped=NA,id=NA,father=NA,mother=NA,sex=NA,affected=NA,ava=NA,node=NA,name=NA,dob=NA,partner=NA,sg=NA)
+#print(df)
 
 while( length(line) != 0 ) {
   
   #if the line was describing a attributes
   if (grepl("_is",line) == TRUE ){
     
-    print(paste("attributes:",line))
+    print(paste("line: ",linenum, " attributes:",line))
     aline <- unlist(strsplit(line," "))
+    
     if(aline[2] == "gender_is"){
+      if(aline[3] == "male"){
+        gender = 1
+      }else if(aline[3]=="female"){
+        gender = 2
+      }else{
+        gender = 3
+      }
+      temp <- df$node == aline[1]
+      if (is.na(temp)){
+        print("not exist. ADDING NEW ROW")
+        newrow <- data.frame(ped=NA,id = ID,father=NA,mother=NA,sex = gender,affected=NA,ava=NA,node=aline[1],name=NA,dob=NA,partner=NA,sg=NA)
+        ID <- ID + 1
+        df<-rbind(df,newrow)
+        print(df)
+      } else{
       
+      }
+    
+    
     }else if(aline[2] == "name_is"){
       
     }
@@ -46,7 +65,7 @@ while( length(line) != 0 ) {
   #if the line was describing a relation
   } else if(grepl("_of",line) == TRUE ){
     
-    print(paste("relation: ",line))
+    print(paste("line: ",linenum,"relation: ",line))
     rline <- unlist(strsplit(line," "))
     if(rline[2] == "father_of"){
       
