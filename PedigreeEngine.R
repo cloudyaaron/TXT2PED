@@ -35,6 +35,8 @@ while( length(line) != 0 ) {
     print(paste("line: ",linenum, " attributes:",line))
     aline <- unlist(strsplit(line," "))
     
+    
+    #if attributes was gender
     if(aline[2] == "gender_is"){
       if(aline[3] == "male"){
         gender = 1
@@ -44,19 +46,39 @@ while( length(line) != 0 ) {
         gender = 3
       }
       temp <- df$node == aline[1]
-      if (is.na(temp)){
+      #if not found in previous record
+      if (is.element(TRUE,temp) == FALSE){
         print("not exist. ADDING NEW ROW")
         newrow <- data.frame(ped=NA,id = ID,father=NA,mother=NA,sex = gender,affected=NA,ava=NA,node=aline[1],name=NA,dob=NA,partner=NA,sg=NA)
         ID <- ID + 1
         df<-rbind(df,newrow)
-        print(df)
+       
+        #otherwise edit the current record
       } else{
-      
+        print("record exist")
+        index <- which(temp == TRUE)
+        
+        #col 5 is gender
+        df[index,5] <- gender
       }
     
-    
+    #if attributes is name
     }else if(aline[2] == "name_is"){
-      
+      temp <- df$node == aline[1]
+      if (is.element(TRUE,temp) == FALSE){
+        print("not exist. ADDING NEW ROW")
+        newrow <- data.frame(ped=NA,id = ID,father=NA,mother=NA,sex = NA,affected=NA,ava=NA,node=aline[1],name=aline[3],dob=NA,partner=NA,sg=NA)
+        ID <- ID + 1
+        df<-rbind(df,newrow)
+        
+        #otherwise edit the current record
+      } else{
+        print("record exist")
+        index <- which(temp == TRUE)
+        
+        #col 9 is name
+        df[index,9] <- aline[3]
+      }
     }
     
     #TO-DO
@@ -86,6 +108,8 @@ while( length(line) != 0 ) {
   }
   #can have nore function
   
+  #show the dataframe after reading eachline
+  print(df)
   #Set to nextline
   line<-readLines(con,n=1)
   linenum <- linenum + 1
