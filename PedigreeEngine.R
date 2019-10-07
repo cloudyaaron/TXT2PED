@@ -24,20 +24,73 @@ linenum <- 1
 ID <- 1
 
 #init dataframe
-df <- data.frame(ped=0,id=0,father=0,mother=0,sex=0,affected=0,ava=0,node=0,name=0,dob=0,partner=0,sg=0)
-print(df)
+df <- data.frame(ped=NA,id=NA,father=NA,mother=NA,sex=NA,affected=NA,ava=NA,node=NA,name=NA,dob=NA,partner=NA,sg=NA)
+#print(df)
 
 while( length(line) != 0 ) {
   
   #if the line was describing a attributes
   if (grepl("_is",line) == TRUE ){
     
-    print(paste("attributes:",line))
+    print(paste("line: ",linenum, " attributes:",line))
     aline <- unlist(strsplit(line," "))
+    
+    
+    #if attributes was gender
     if(aline[2] == "gender_is"){
       
-    }else if(aline[2] == "name_is"){
+      #gender 1 is male, 2 is female, 3 is unknown
+      if(aline[3] == "male"){
+        gender = 1
+      }else if(aline[3]=="female"){
+        gender = 2
+      }else{
+        gender = 3
+      }
+      temp <- df$node == aline[1]
       
+      #if not found in previous record
+      if (is.element(TRUE,temp) == FALSE){
+        print("not exist. ADDING NEW ROW")
+        newrow <- data.frame(ped=NA,id = ID,father=NA,mother=NA,sex = gender,affected=NA,ava=NA,node=aline[1],name=NA,dob=NA,partner=NA,sg=NA)
+        ID <- ID + 1
+        df<-rbind(df,newrow)
+       
+        #otherwise edit the current record
+      } else{
+        print("record exist")
+        index <- which(temp == TRUE)
+        
+        #col 5 is gender
+        df[index,5] <- gender
+      }
+    
+    #if attributes is name
+    }else if(aline[2] == "name_is"){
+      temp <- df$node == aline[1]
+      
+      #if user input both first and last name
+      if (length(aline) == 4){
+        tname <- paste(aline[3],aline[4])
+      } else {
+        tname <- aline[3]
+      }
+      
+      # if no record has been found
+      if (is.element(TRUE,temp) == FALSE){
+        print("not exist. ADDING NEW ROW")
+        newrow <- data.frame(ped=NA,id = ID,father=NA,mother=NA,sex = NA,affected=NA,ava=NA,node=aline[1],name=tname,dob=NA,partner=NA,sg=NA)
+        ID <- ID + 1
+        df<-rbind(df,newrow)
+        
+        #otherwise edit the current record
+      } else{
+        print("record exist")
+        index <- which(temp == TRUE)
+        
+        #col 9 is name
+        df[index,9] <- tname
+      }
     }
     
     #TO-DO
@@ -46,7 +99,7 @@ while( length(line) != 0 ) {
   #if the line was describing a relation
   } else if(grepl("_of",line) == TRUE ){
     
-    print(paste("relation: ",line))
+    print(paste("line: ",linenum,"relation: ",line))
     rline <- unlist(strsplit(line," "))
     if(rline[2] == "father_of"){
       
@@ -67,6 +120,8 @@ while( length(line) != 0 ) {
   }
   #can have nore function
   
+  #show the dataframe after reading eachline
+  print(df)
   #Set to nextline
   line<-readLines(con,n=1)
   linenum <- linenum + 1
