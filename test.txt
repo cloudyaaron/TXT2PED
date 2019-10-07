@@ -5,3 +5,6 @@ A father_of B
 A name_is "John"
 A son_of C
 A partner_of D
+E name_is "john cena"
+E gender_is unknown
+B name_is "A's son"

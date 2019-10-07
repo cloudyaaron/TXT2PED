@@ -38,6 +38,8 @@ while( length(line) != 0 ) {
     
     #if attributes was gender
     if(aline[2] == "gender_is"){
+      
+      #gender 1 is male, 2 is female, 3 is unknown
       if(aline[3] == "male"){
         gender = 1
       }else if(aline[3]=="female"){
@@ -46,6 +48,7 @@ while( length(line) != 0 ) {
         gender = 3
       }
       temp <- df$node == aline[1]
+      
       #if not found in previous record
       if (is.element(TRUE,temp) == FALSE){
         print("not exist. ADDING NEW ROW")
@@ -65,9 +68,18 @@ while( length(line) != 0 ) {
     #if attributes is name
     }else if(aline[2] == "name_is"){
       temp <- df$node == aline[1]
+      
+      #if user input both first and last name
+      if (length(aline) == 4){
+        tname <- paste(aline[3],aline[4])
+      } else {
+        tname <- aline[3]
+      }
+      
+      # if no record has been found
       if (is.element(TRUE,temp) == FALSE){
         print("not exist. ADDING NEW ROW")
-        newrow <- data.frame(ped=NA,id = ID,father=NA,mother=NA,sex = NA,affected=NA,ava=NA,node=aline[1],name=aline[3],dob=NA,partner=NA,sg=NA)
+        newrow <- data.frame(ped=NA,id = ID,father=NA,mother=NA,sex = NA,affected=NA,ava=NA,node=aline[1],name=tname,dob=NA,partner=NA,sg=NA)
         ID <- ID + 1
         df<-rbind(df,newrow)
         
@@ -77,7 +89,7 @@ while( length(line) != 0 ) {
         index <- which(temp == TRUE)
         
         #col 9 is name
-        df[index,9] <- aline[3]
+        df[index,9] <- tname
       }
     }
     
