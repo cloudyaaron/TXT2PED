@@ -51,14 +51,14 @@ while( length(line) != 0 ) {
       
       #if not found in previous record
       if (is.element(TRUE,temp) == FALSE){
-        print("not exist. ADDING NEW ROW")
+        #print("not exist. ADDING NEW ROW")
         newrow <- data.frame(ped=NA,id = ID,father=NA,mother=NA,sex = gender,affected=NA,ava=NA,node=aline[1],name=NA,dob=NA,partner=NA,sg=NA)
         ID <- ID + 1
         df<-rbind(df,newrow)
        
         #otherwise edit the current record
       } else{
-        print("record exist")
+        #print("record exist")
         index <- which(temp == TRUE)
         
         #col 5 is gender
@@ -78,14 +78,14 @@ while( length(line) != 0 ) {
       
       # if no record has been found
       if (is.element(TRUE,temp) == FALSE){
-        print("not exist. ADDING NEW ROW")
+        #print("not exist. ADDING NEW ROW")
         newrow <- data.frame(ped=NA,id = ID,father=NA,mother=NA,sex = NA,affected=NA,ava=NA,node=aline[1],name=tname,dob=NA,partner=NA,sg=NA)
         ID <- ID + 1
         df<-rbind(df,newrow)
         
         #otherwise edit the current record
       } else{
-        print("record exist")
+        #print("record exist")
         index <- which(temp == TRUE)
         
         #col 9 is name
@@ -100,10 +100,71 @@ while( length(line) != 0 ) {
   } else if(grepl("_of",line) == TRUE ){
     
     print(paste("line: ",linenum,"relation: ",line))
+    
+    #relationship always happened within 2 people, rline[1] & rline[3] store this two node 
     rline <- unlist(strsplit(line," "))
-    if(rline[2] == "father_of"){
+    
+    #handle relationship parent/son
+    if(rline[2] == "father_of" || rline[2] == "mother_of"){
+      coln <- 0
+      if (rline[2] == "father_of"){
+        coln <- 3
+      } else{
+        coln <- 4
+      }
       
-    }else if(rline[2] == "mother_of"){
+      temp <- df$node == rline[1]
+      
+      #check first person exist?
+      if (is.element(TRUE,temp) == FALSE){
+        print("First person record not exists")
+        temp2 <- df$node == rline[3]
+        
+        newrow <- data.frame(ped=NA,id = ID,father=NA,mother=NA,sex = NA,affected=NA,ava=NA,node=rline[1],name=NA,dob=NA,partner=NA,sg=NA)
+        ID <- ID + 1
+        df<-rbind(df,newrow)
+        
+        #check if second person has exist
+        if(is.element(TRUE,temp2) == FALSE){
+          print("second person record not exists")
+          newrow <- data.frame(ped=NA,id = ID,father=NA,mother=NA,sex = NA,affected=NA,ava=NA,node=rline[3],name=NA,dob=NA,partner=NA,sg=NA)
+          ID <- ID + 1
+          df<-rbind(df,newrow)
+          
+          temp <- df$node == rline[1]
+          temp2 <- df$node == rline[3]
+          indexa <- which(temp == TRUE)
+          indexb <- which(temp2 == TRUE)
+          
+          #should suggest gender in here?
+          
+          df[indexb,coln] <- df[indexa,2]
+          
+        } else{
+          print("second person record exists")
+          
+          #create second person
+          
+        }
+      } else {
+        
+        #edit record for first person
+        print("First person record exists")
+        temp2 <- df$node == rline[3]
+        
+        #check if second person has exist
+        if(is.element(TRUE,temp2) == FALSE){
+          print("second person record not exists")
+        } else{
+          print("second person record exists")
+          
+          #create second person
+        }
+        
+      }
+      
+      
+    }else if(rline[2] == ""){
       
     }
     
