@@ -64,7 +64,9 @@ while( length(line) != 0 ) {
         #col 5 is gender
         df[index,5] <- gender
       }
-    
+      #suggest gender to other relate people (wife or husband)
+      
+      
     #if attributes is name
     }else if(aline[2] == "name_is"){
       temp <- df$node == aline[1]
@@ -114,57 +116,71 @@ while( length(line) != 0 ) {
       }
       
       temp <- df$node == rline[1]
+      temp2 <- df$node == rline[3]
       
       #check first person exist?
       if (is.element(TRUE,temp) == FALSE){
         print("First person record not exists")
-        temp2 <- df$node == rline[3]
         
+        #since coln is the column that parent store, coln-2 is gender
+        newrow <- data.frame(ped=NA,id = ID,father=NA,mother=NA,sex = coln-2,affected=NA,ava=NA,node=rline[1],name=NA,dob=NA,partner=NA,sg=NA)
+        ID <- ID + 1
+        df<-rbind(df,newrow)
+      }
+        
+      #check if second person has exist
+      if(is.element(TRUE,temp2) == FALSE){
+        print("second person record not exists")
+        newrow <- data.frame(ped=NA,id = ID,father=NA,mother=NA,sex = NA,affected=NA,ava=NA,node=rline[3],name=NA,dob=NA,partner=NA,sg=NA)
+        ID <- ID + 1
+        df<-rbind(df,newrow)
+          
+      }
+      
+      #edit current record
+      temp <- df$node == rline[1]
+      temp2 <- df$node == rline[3]
+      indexa <- which(temp == TRUE)
+      indexb <- which(temp2 == TRUE)
+          
+      #should suggest gender in here?
+      #gender has been suggest aboved
+      df[indexb,coln] <- df[indexa,2]
+      
+    }else if(rline[2] == "partner_of"){
+      temp <- df$node == rline[1]
+      temp2 <- df$node == rline[3]
+      
+      #check first person exist?
+      if (is.element(TRUE,temp) == FALSE){
+        print("First person record not exists")
+        
+        #since coln is the column that parent store, coln-2 is gender
         newrow <- data.frame(ped=NA,id = ID,father=NA,mother=NA,sex = NA,affected=NA,ava=NA,node=rline[1],name=NA,dob=NA,partner=NA,sg=NA)
         ID <- ID + 1
         df<-rbind(df,newrow)
         
-        #check if second person has exist
-        if(is.element(TRUE,temp2) == FALSE){
-          print("second person record not exists")
-          newrow <- data.frame(ped=NA,id = ID,father=NA,mother=NA,sex = NA,affected=NA,ava=NA,node=rline[3],name=NA,dob=NA,partner=NA,sg=NA)
-          ID <- ID + 1
-          df<-rbind(df,newrow)
-          
-          temp <- df$node == rline[1]
-          temp2 <- df$node == rline[3]
-          indexa <- which(temp == TRUE)
-          indexb <- which(temp2 == TRUE)
-          
-          #should suggest gender in here?
-          
-          df[indexb,coln] <- df[indexa,2]
-          
-        } else{
-          print("second person record exists")
-          
-          #create second person
-          
-        }
-      } else {
-        
-        #edit record for first person
-        print("First person record exists")
-        temp2 <- df$node == rline[3]
-        
-        #check if second person has exist
-        if(is.element(TRUE,temp2) == FALSE){
-          print("second person record not exists")
-        } else{
-          print("second person record exists")
-          
-          #create second person
-        }
-        
       }
       
+      #check if second person has exist
+      if (is.element(TRUE,temp2) == FALSE){
+        print("second person record not exists")
+        newrow <- data.frame(ped=NA,id = ID,father=NA,mother=NA,sex = NA,affected=NA,ava=NA,node=rline[3],name=NA,dob=NA,partner=NA,sg=NA)
+        ID <- ID + 1
+        df<-rbind(df,newrow)
+      }
       
-    }else if(rline[2] == ""){
+      #get index
+      temp <- df$node == rline[1]
+      temp2 <- df$node == rline[3]
+      indexa <- which(temp == TRUE)
+      indexb <- which(temp2 == TRUE)
+      
+      #assgin partner
+      df[indexa,'partner'] = df[indexb,'id']
+      df[indexb,'partner'] = df[indexa,'id']
+      
+      
       
     }
     
