@@ -3,15 +3,15 @@
 import sys
 from pip._internal import main
 import subprocess
-
+import platform
 # from PyQt5 import QtCore
 try:
     from PyQt5.QtWidgets import *
 except ModuleNotFoundError:
     print("PYQT5 missing, installing......")
     if __name__ == '__main__':
-        main(['install', 'pyqt5'])
-    print('relaunch after PYQT5 installed')
+        main(['install', 'PyQt5'])
+    print('relaunch after PyQt5 installed')
     input('press any key to exit')
     exit()
 
@@ -22,7 +22,7 @@ class Window(QWidget):
     def __init__(self):
         super(Window, self).__init__()
         self.resize(1024, 768)
-        self.textline = QTextBrowser(self)
+        self.textline = QTextEdit(self)
         self.console = QTextBrowser(self)
         self.console.resize(500, 600)
         self.console.move(300, 0)
@@ -60,13 +60,17 @@ class Window(QWidget):
         self.textline.setText(ft)
         f.close()
         cmd = 'Rscript PedigreeEngine.R ' + pwd
-        feedback = subprocess.check_output(cmd, shell=True)
+        try:
+            feedback = subprocess.check_output(cmd, shell=True)
+        except:
+            print("Rscript is not been able to run, check system environment variable if you are using windows")
         self.console.setText(feedback.decode('utf-8'))
 
 
 # Welcome menu need more polish and ui friendly design
 class StartWindow(QWidget):
     def __init__(self):
+
         super(StartWindow, self).__init__()
         self.resize(1024, 768)
         self.ui = Window()
