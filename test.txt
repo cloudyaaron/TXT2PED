@@ -9,3 +9,4 @@ E name_is "john cena"
 E gender_is unknown
 B name_is "A's son"
 C mother_of B
+A decaeased_is true
