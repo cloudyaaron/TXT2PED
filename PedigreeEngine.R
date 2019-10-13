@@ -30,7 +30,11 @@ colnames(df) <- column_names
 #print(df)
 
 while( length(line) != 0 ) {
+
   
+# ======================================================
+# attributes paraphase
+# ======================================================  
   #if the line was describing a attributes
   if (grepl("_is",line) == TRUE ){
     
@@ -105,6 +109,7 @@ while( length(line) != 0 ) {
 # ======================================================
     } else if (aline[2] == "decaeased_is") {
       input_node <- aline[1]
+      aline[3] <- toupper(aline[3])
       if (aline[3] == "TRUE") {
         dead = 1
       } else {
@@ -125,7 +130,9 @@ while( length(line) != 0 ) {
     
     
     
-    
+# ======================================================
+# Relation paraphase
+# ======================================================      
   #if the line was describing a relation
   } else if(grepl("_of",line) == TRUE ){
     
@@ -134,6 +141,10 @@ while( length(line) != 0 ) {
     #relationship always happened within 2 people, rline[1] & rline[3] store this two node 
     rline <- unlist(strsplit(line," "))
     
+    
+# ======================================================
+# Relation: father/mother
+# ======================================================  
     #handle relationship parent/son
     if(rline[2] == "father_of" || rline[2] == "mother_of"){
       coln <- 0
@@ -174,7 +185,11 @@ while( length(line) != 0 ) {
       #should suggest gender in here?
       #gender has been suggest aboved
       df[indexb,coln] <- df[indexa,2]
+
       
+# ======================================================
+# Relation: Partner
+# ======================================================      
     }else if(rline[2] == "partner_of"){
       temp <- df$node == rline[1]
       temp2 <- df$node == rline[3]
@@ -208,7 +223,7 @@ while( length(line) != 0 ) {
       df[indexa,'partner'] = df[indexb,'id']
       df[indexb,'partner'] = df[indexa,'id']
        
-      #suggest gender if 
+      #suggest gender if gender was assgined (should also assign father and mother)
       
       
     }
@@ -217,7 +232,9 @@ while( length(line) != 0 ) {
     
     
     
-    
+# ======================================================
+# Alert user when syntax error with line #
+# ======================================================
   #alertuser error when line can not be understand
   } else{
     showerror <- paste("line ",linenum, " has syntax error")
@@ -235,6 +252,10 @@ while( length(line) != 0 ) {
 #close connection to the file
 close(con)
 
+
+# ======================================================
+# Function that print .ped file
+# ======================================================
 #function that output the .ped file
 print_ped <- function(){
   
