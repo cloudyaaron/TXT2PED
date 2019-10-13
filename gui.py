@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 import sys
-import pip
+from pip._internal import main
 import subprocess
 
 # from PyQt5 import QtCore
@@ -10,7 +10,7 @@ try:
 except ModuleNotFoundError:
     print("PYQT5 missing, installing......")
     if __name__ == '__main__':
-        pip.main(['install', 'pyqt5'])
+        main(['install', 'pyqt5'])
     print('relaunch after PYQT5 installed')
     input('press any key to exit')
     exit()
@@ -59,9 +59,9 @@ class Window(QWidget):
         ft = f.read()
         self.textline.setText(ft)
         f.close()
-        cmd = 'Rscript.exe PedigreeEngine.R ' + pwd
+        cmd = 'Rscript PedigreeEngine.R ' + pwd
         feedback = subprocess.check_output(cmd, shell=True)
-        self.console.setText(feedback.decode('UTF-8'))
+        self.console.setText(feedback.decode('utf-8'))
 
 
 # Welcome menu need more polish and ui friendly design
