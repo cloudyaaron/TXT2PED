@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 import sys
-
+import pip
 import subprocess
 
 # from PyQt5 import QtCore
@@ -9,7 +9,8 @@ try:
     from PyQt5.QtWidgets import *
 except ModuleNotFoundError:
     print("PYQT5 missing, installing......")
-    subprocess.call('pip install pyqt5')
+    if __name__ == '__main__':
+        pip.main(['install', 'pyqt5'])
     print('relaunch after PYQT5 installed')
     input('press any key to exit')
     exit()
