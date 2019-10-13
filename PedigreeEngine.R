@@ -179,7 +179,8 @@ while( length(line) != 0 ) {
       #assgin partner
       df[indexa,'partner'] = df[indexb,'id']
       df[indexb,'partner'] = df[indexa,'id']
-      
+       
+      #suggest gender if 
       
       
     }
