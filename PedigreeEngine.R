@@ -24,7 +24,9 @@ linenum <- 1
 ID <- 1
 
 #init dataframe
-df <- data.frame(ped=NA,id=NA,father=NA,mother=NA,sex=NA,affected=NA,ava=NA,node=NA,name=NA,dob=NA,partner=NA,sg=NA)
+df <- data.frame(matrix(ncol = 12, nrow = 0))
+column_names <- c("ped", "id", "father", "mother", "sex", "affected", "ava", "node", "name", "dob", "partner", "sg")
+colnames(df) <- column_names
 #print(df)
 
 while( length(line) != 0 ) {
@@ -35,7 +37,9 @@ while( length(line) != 0 ) {
     print(paste("line: ",linenum, " attributes:",line))
     aline <- unlist(strsplit(line," "))
     
-    
+# ======================================================
+# attribute: gender_is
+# ======================================================    
     #if attributes was gender
     if(aline[2] == "gender_is"){
       
@@ -66,7 +70,9 @@ while( length(line) != 0 ) {
       }
       #suggest gender to other relate people (wife or husband)
       
-      
+# ======================================================
+# attribute: name_is
+# ======================================================      
     #if attributes is name
     }else if(aline[2] == "name_is"){
       temp <- df$node == aline[1]
@@ -93,9 +99,31 @@ while( length(line) != 0 ) {
         #col 9 is name
         df[index,9] <- tname
       }
+      
+# ======================================================
+# attribute: decaeased_is
+# ======================================================
+    } else if (aline[2] == "decaeased_is") {
+      input_node <- aline[1]
+      if (aline[3] == "TRUE") {
+        dead = 1
+      } else {
+        dead = 0
+      }
+      
+      # check if this person exist
+      if (input_node %in% df$node) {
+        # add new row for this person
+        newrow <- data.frame(ped=NA,id = ID,father=NA,mother=NA,sex = NA,affected=NA,ava=dead,node=aline[1],name=NA,dob=NA,partner=NA,sg=NA)
+        ID <- ID + 1
+        df<-rbind(df,newrow)
+      } else {
+        index <- which(df$node == input_node)
+        df$ava[index] = dead
+      }
     }
     
-    #TO-DO
+    
     
     
   #if the line was describing a relation
