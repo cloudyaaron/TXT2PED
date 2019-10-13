@@ -1,11 +1,18 @@
 #!/usr/bin/python
 
 import sys
-from PyQt5.QtWidgets import *
+
 import subprocess
 
-
 # from PyQt5 import QtCore
+try:
+    from PyQt5.QtWidgets import *
+except ImportError:
+    print("PYQT5 missing, installing......")
+    subprocess.call('pip install pyqt5')
+    print('relaunch after PYQT5 installed')
+    input('press any key to exit')
+    exit()
 
 
 # window for user to choose file
@@ -51,7 +58,7 @@ class Window(QWidget):
         ft = f.read()
         self.textline.setText(ft)
         f.close()
-        cmd = 'Rscript.exe PedigreeEngine.R test.txt'
+        cmd = 'Rscript.exe PedigreeEngine.R ' + pwd
         feedback = subprocess.check_output(cmd, shell=True)
         self.console.setText(feedback.decode('UTF-8'))
 
