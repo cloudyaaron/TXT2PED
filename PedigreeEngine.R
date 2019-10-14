@@ -107,7 +107,7 @@ while( length(line) != 0 ) {
 # ======================================================
 # attribute: decaeased_is
 # ======================================================
-    } else if (aline[2] == "decaeased_is") {
+    } else if (aline[2] == "decaeased_is"){
       input_node <- aline[1]
       aline[3] <- toupper(aline[3])
       if (aline[3] == "TRUE") {
@@ -240,11 +240,70 @@ while( length(line) != 0 ) {
        
       #suggest gender if gender was assgined (should also assign father and mother)
       
-      
+    
+# ======================================================
+# Relation: Brother/Sister
+# ====================================================== 
+    } else if (rline[2] == "brother_of" || rline[2] == "sister_of"){
+      node1 = rline[1]
+      node2 = rline[3]
+      # check if these two persons in the dataframe
+      if (node1 %in% df$node && node2 %in% df$node){
+        # check if they have parents, they should have same parents
+        index1 = which(df$node == node1)
+        index2 = which(df$node == node2)
+        if (is.na(df$father[index1]) && !is.na(df$father[index2])) {
+          df$father[index1] = df$father[index2]
+        } else if (is.na(df$father[index2]) && !is.na(df$father[index1])) {
+          df$father[index2] = df$father[index1]
+        }
+        if (is.na(df$mother[index1]) && !is.na(df$mother[index2])) {
+          df$mother[index1] = df$mother[index2]
+        } else if (is.na(df$father[index2]) && !is.na(df$father[index1])) {
+          df$mother[index2] = df$mother[index1]
+        }
+        # else they both don't have parents in dataframe, leave the values as NA
+        
+        # add same generation to each other, node name as string
+        if (is.na(df$sg[index1])) {
+          df$sg[index1] = as.character(node2)
+        } else {
+          df$sg[index1] = paste(df$sg[index1], node2, sep = ",")
+        }
+        if (is.na(df$sg[index2])) {
+          df$sg[index2] = as.character(node1)
+        } else {
+          df$sg[index2] = paste(df$sg[index2], node1, sep = ",")
+        }
+      # if node1 not in dataframe
+      } else if (!(node1 %in% df$node)) {
+        f = df$father[index2]
+        m = df$mother[index2]
+        if (rline[2] == "brother_of") { # brother: male
+          s = 1
+        } else {                        # sister: female
+          s = 2
+        }
+        newrow <- data.frame(ped=NA,id=ID,father=f,mother=m,sex=NA,affected=NA,ava=NA,node=node2,name=NA,dob=NA,partner=NA,sg=c(node1))
+        ID <- ID + 1
+        df<-rbind(df,newrow)
+      # if node2 not in dataframe
+      } else if (!(node2 %in% df$node)) {
+        f = df$father[index1]
+        m = df$mother[index1]
+        newrow <- data.frame(ped=NA,id=ID,father=f,mother=m,sex=NA,affected=NA,ava=NA,node=node1,name=NA,dob=NA,partner=NA,sg=c(node2))
+        ID <- ID + 1
+        df<-rbind(df,newrow)
+      # if both not in dataframe
+      } else {
+        newrow <- data.frame(ped=NA,id=ID,father=NA,mother=NA,sex=NA,affected=NA,ava=NA,node=node1,name=NA,dob=NA,partner=NA,sg=c(node2))
+        ID <- ID + 1
+        df<-rbind(df,newrow)
+        newrow <- data.frame(ped=NA,id=ID,father=NA,mother=NA,sex=NA,affected=NA,ava=NA,node=node2,name=NA,dob=NA,partner=NA,sg=c(node1))
+        ID <- ID + 1
+        df<-rbind(df,newrow)
+      }
     }
-    
-    #TO-DO
-    
     
     
 # ======================================================
