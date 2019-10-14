@@ -10,3 +10,6 @@ E gender_is unknown
 B name_is "A's son"
 C mother_of B
 A decaeased_is true
+A DOB_is 1970-01-01
+A brother_of B
+C sister_of A
