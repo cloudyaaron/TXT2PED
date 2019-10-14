@@ -1,5 +1,22 @@
 #!/usr/bin/env Rscript
 
+# ======================================================
+# Function that check for the person's relationship (strong suggest)
+# ======================================================
+strong_suggest <- function(node){
+  print(paste("strong suggest:",node))
+  index <- which(df$node == node)
+  #detect if node has a gender
+  if(!is.na(df[index,'sex'])){
+    print(paste(node,"has gender",df[index,'sex']))
+  }
+  #detect if node has a sg
+  
+  #detect if node has a partner
+  
+  #detect if node is father or mother of others
+  
+}
 
 #pasing the argument in to the rscript
 args <- commandArgs(T)
@@ -144,6 +161,9 @@ while( length(line) != 0 ) {
         df<-rbind(df,newrow)
       }
     }
+    
+    #suggest the info with current info
+    strong_suggest(aline[1])
     
 # ======================================================
 # Relation paraphase
@@ -334,3 +354,18 @@ close(con)
 print_ped <- function(){
   
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
