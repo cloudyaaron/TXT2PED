@@ -119,16 +119,31 @@ while( length(line) != 0 ) {
       # check if this person exist
       if (input_node %in% df$node) {
         # add new row for this person
+        index <- which(df$node == input_node)
+        df$ava[index] = dead
+      } else {
         newrow <- data.frame(ped=NA,id = ID,father=NA,mother=NA,sex = NA,affected=NA,ava=dead,node=aline[1],name=NA,dob=NA,partner=NA,sg=NA)
         ID <- ID + 1
         df<-rbind(df,newrow)
-      } else {
+      }
+
+# ======================================================
+# attribute: decaeased_is
+# ======================================================  
+    } else if (aline[2] == "DOB_is"){
+      input_node <- aline[1]
+      DOB <- aline[3]
+      # check if this person exist
+      if (input_node %in% df$node) {
+        # add new row for this person
         index <- which(df$node == input_node)
-        df$ava[index] = dead
+        df$dob[index] = DOB
+      } else {
+        newrow <- data.frame(ped=NA,id = ID,father=NA,mother=NA,sex = NA,affected=NA,ava=NA,node=aline[1],name=NA,dob=DOB,partner=NA,sg=NA)
+        ID <- ID + 1
+        df<-rbind(df,newrow)
       }
     }
-    
-    
     
 # ======================================================
 # Relation paraphase
