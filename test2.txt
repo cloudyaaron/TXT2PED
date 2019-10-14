@@ -1,3 +1,4 @@
 A father_of B
 C mother_of D
 A name_is "john cena"
+A partner_of E

@@ -22,6 +22,8 @@ class Window(QWidget):
     def __init__(self):
         super(Window, self).__init__()
         self.resize(1024, 768)
+        self.pwd = './'
+        self.filename = 'sample.txt'
         self.textline = QTextEdit(self)
         self.console = QTextBrowser(self)
         self.console.resize(500, 600)
@@ -36,30 +38,40 @@ class Window(QWidget):
         self.button.move(512, 600)
         self.confirm.move(412, 600)
         self.setWindowTitle('BINF6112')
-        self.confirm.setEnabled(False)
+        self.confirm.setEnabled(True)
+        f = open("sample.txt", 'r', encoding='utf-8')
+        ft = f.read()
+        self.textline.setText(ft)
+        f.close()
+
+
 
     def open_dic(self):
         file, file_type = QFileDialog.getOpenFileName(self, "open", "./", "TEXT FILES (*.txt)")  #
 
+        self.filename = file
         print(file_type)
         if file_type != '':
             self.confirm.setEnabled(True)
-        self.textline.setText(file)
-
-    # show user what's in the file
-    def preview(self):
-        self.confirm.setEnabled(False)
-
-        pwd = self.textline.toPlainText()
-        # pwd = pwd.replace("/", "\\")
-        f = open(pwd, encoding='utf-8')
-
-        print(f)
-        print(pwd)
+        self.pwd = file
+        f = open(file, 'r', encoding='utf-8')
         ft = f.read()
         self.textline.setText(ft)
         f.close()
-        cmd = 'Rscript PedigreeEngine.R ' + pwd
+
+
+    # show user what's in the file
+    def preview(self):
+        self.confirm.setEnabled(True)
+
+        text = self.textline.toPlainText()
+        f = open(self.filename, 'w', encoding='utf-8')
+        f.write(text)
+        #pwd = self.textline.toPlainText()
+        # pwd = pwd.replace("/", "\\")
+        f.close()
+
+        cmd = 'Rscript PedigreeEngine.R ' + self.filename
         try:
             feedback = subprocess.check_output(cmd, shell=True)
         except:
