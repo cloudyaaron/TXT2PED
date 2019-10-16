@@ -1,4 +1,4 @@
-A father_of B
+A partner_of E
 C mother_of D
 A name_is "john cena"
-A partner_of E
+E gender_is female

@@ -22,11 +22,10 @@ class Window(QWidget):
     def __init__(self):
         super(Window, self).__init__()
         self.resize(1024, 768)
-        self.pwd = './'
-        self.filename = 'sample.txt'
+        self.filename = './sample.txt'
         self.textline = QTextEdit(self)
         self.console = QTextBrowser(self)
-        self.console.resize(500, 600)
+        self.console.resize(700, 600)
         self.console.move(300, 0)
         self.button = QPushButton(self)
         self.confirm = QPushButton(self)
@@ -39,7 +38,7 @@ class Window(QWidget):
         self.confirm.move(412, 600)
         self.setWindowTitle('BINF6112')
         self.confirm.setEnabled(True)
-        f = open("sample.txt", 'r', encoding='utf-8')
+        f = open(self.filename, 'r', encoding='utf-8')
         ft = f.read()
         self.textline.setText(ft)
         f.close()
@@ -53,7 +52,7 @@ class Window(QWidget):
         print(file_type)
         if file_type != '':
             self.confirm.setEnabled(True)
-        self.pwd = file
+        self.filename = file
         f = open(file, 'r', encoding='utf-8')
         ft = f.read()
         self.textline.setText(ft)
@@ -72,10 +71,9 @@ class Window(QWidget):
         f.close()
 
         cmd = 'Rscript PedigreeEngine.R ' + self.filename
-        try:
-            feedback = subprocess.check_output(cmd, shell=True)
-        except:
-            print("Rscript is not been able to run, check system environment variable if you are using windows")
+
+        feedback = subprocess.check_output(cmd, shell=True)
+
         self.console.setText(feedback.decode('utf-8'))
 
 

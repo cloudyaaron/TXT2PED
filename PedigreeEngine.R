@@ -6,9 +6,28 @@
 strong_suggest <- function(node){
   print(paste("strong suggest:",node))
   index <- which(df$node == node)
+  
   #detect if node has a gender
   if(!is.na(df[index,'sex'])){
-    print(paste(node,"has gender",df[index,'sex']))
+
+    #if the node with gender has a partner
+    if(!is.na(df[index,'partner'])){
+      partner_index <- which(df$id == df[index,'partner'])
+      #if partner node has no sex yet, assign sex for them
+      if(is.na(df[partner_index,'sex'])){
+        if(df[index,'sex']==2){
+          df[partner_index,'sex'] <<- 1
+        }else if(df[index,'partner']==1){
+          df[partner_index,'sex'] <<- 2
+        }else{
+          df[partner_index,'sex'] <<- 3
+        }
+      }
+      
+    #if current node has no gender try to find a gender for node
+    }else{
+     
+    }
   }
   #detect if node has a sg
   
@@ -325,7 +344,9 @@ while( length(line) != 0 ) {
       }
     }
     
-    
+    #suggest in relation
+    strong_suggest(rline[1])
+    strong_suggest(rline[3])
 # ======================================================
 # Alert user when syntax error with line #
 # ======================================================
