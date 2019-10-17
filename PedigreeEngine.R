@@ -37,6 +37,14 @@ strong_suggest <- function(node){
   
 }
 
+
+# ======================================================
+# give a .ped file in the same folder
+# ======================================================
+print_ped <- function(){
+  write.csv(df[,1:7],file = "output.ped")
+}
+
 #pasing the argument in to the rscript
 args <- commandArgs(T)
 if (length(args) == 0){
@@ -365,16 +373,11 @@ while( length(line) != 0 ) {
   linenum <- linenum + 1
 }
 #close connection to the file
+print_ped()
 close(con)
 
 
-# ======================================================
-# Function that print .ped file
-# ======================================================
-#function that output the .ped file
-print_ped <- function(){
-  
-}
+
 
 
 
