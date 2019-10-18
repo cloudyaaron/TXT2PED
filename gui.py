@@ -78,8 +78,8 @@ class Window(QWidget):
             cmd = cmd+' -s'
 
         feedback = subprocess.check_output(cmd, shell=True)
-
-        self.console.setText(feedback.decode('utf-8'))
+        text = feedback.decode('utf-8')
+        self.console.setText(text)
 
 
 # Welcome menu need more polish and ui friendly design
