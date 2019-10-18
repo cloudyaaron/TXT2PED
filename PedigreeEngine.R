@@ -45,7 +45,12 @@ print_ped <- function(){
   write.csv(df[,1:7],file = "output.ped")
 }
 
+
+# ======================================================
+# main start
+# ======================================================
 #pasing the argument in to the rscript
+ss <- FALSE
 args <- commandArgs(T)
 if (length(args) == 0){
   print("$Usage Rsript PedigreeEngine.R sample.txt")
@@ -54,18 +59,23 @@ if (length(args) == 0){
   
 }else if (length(args) == 1){
   print(args)
+}else if (length(args) == 2 && args[2] == '-s'){
+  print("Strong suggest open")
+  print(args)
+  ss <<- TRUE
 } else{
   print("$Usage Rsript PedigreeEngine.R sample.txt")
   stop("exit")
 }
 
 #reading each line of the text file 
-con <- file(args,"r")
+con <- file(args[1],"r")
 
 #read line one by one by the provindg file
 line <- readLines(con,n = 1)
 linenum <- 1
 ID <- 1
+familyid <- 1
 
 #init dataframe
 df <- data.frame(matrix(ncol = 12, nrow = 0))
@@ -104,7 +114,7 @@ while( length(line) != 0 ) {
       #if not found in previous record
       if (is.element(TRUE,temp) == FALSE){
         #print("not exist. ADDING NEW ROW")
-        newrow <- data.frame(ped=NA,id = ID,father=NA,mother=NA,sex = gender,affected=NA,ava=NA,node=aline[1],name=NA,dob=NA,partner=NA,sg=NA)
+        newrow <- data.frame(ped=familyid,id = ID,father=NA,mother=NA,sex = gender,affected=NA,ava=NA,node=aline[1],name=NA,dob=NA,partner=NA,sg=NA)
         ID <- ID + 1
         df<-rbind(df,newrow)
        
@@ -135,7 +145,7 @@ while( length(line) != 0 ) {
       # if no record has been found
       if (is.element(TRUE,temp) == FALSE){
         #print("not exist. ADDING NEW ROW")
-        newrow <- data.frame(ped=NA,id = ID,father=NA,mother=NA,sex = NA,affected=NA,ava=NA,node=aline[1],name=tname,dob=NA,partner=NA,sg=NA)
+        newrow <- data.frame(ped=familyid,id = ID,father=NA,mother=NA,sex = NA,affected=NA,ava=NA,node=aline[1],name=tname,dob=NA,partner=NA,sg=NA)
         ID <- ID + 1
         df<-rbind(df,newrow)
         
@@ -166,7 +176,7 @@ while( length(line) != 0 ) {
         index <- which(df$node == input_node)
         df$ava[index] = dead
       } else {
-        newrow <- data.frame(ped=NA,id = ID,father=NA,mother=NA,sex = NA,affected=NA,ava=dead,node=aline[1],name=NA,dob=NA,partner=NA,sg=NA)
+        newrow <- data.frame(ped=familyid,id = ID,father=NA,mother=NA,sex = NA,affected=NA,ava=dead,node=aline[1],name=NA,dob=NA,partner=NA,sg=NA)
         ID <- ID + 1
         df<-rbind(df,newrow)
       }
@@ -183,14 +193,16 @@ while( length(line) != 0 ) {
         index <- which(df$node == input_node)
         df$dob[index] = DOB
       } else {
-        newrow <- data.frame(ped=NA,id = ID,father=NA,mother=NA,sex = NA,affected=NA,ava=NA,node=aline[1],name=NA,dob=DOB,partner=NA,sg=NA)
+        newrow <- data.frame(ped=familyid,id = ID,father=NA,mother=NA,sex = NA,affected=NA,ava=NA,node=aline[1],name=NA,dob=DOB,partner=NA,sg=NA)
         ID <- ID + 1
         df<-rbind(df,newrow)
       }
     }
     
     #suggest the info with current info
-    strong_suggest(aline[1])
+    if(ss == TRUE){
+      strong_suggest(aline[1])
+    }
     
 # ======================================================
 # Relation paraphase
@@ -224,7 +236,7 @@ while( length(line) != 0 ) {
         print("First person record not exists")
         
         #since coln is the column that parent store, coln-2 is gender
-        newrow <- data.frame(ped=NA,id = ID,father=NA,mother=NA,sex = coln-2,affected=NA,ava=NA,node=rline[1],name=NA,dob=NA,partner=NA,sg=NA)
+        newrow <- data.frame(ped=familyid,id = ID,father=NA,mother=NA,sex = coln-2,affected=NA,ava=NA,node=rline[1],name=NA,dob=NA,partner=NA,sg=NA)
         ID <- ID + 1
         df<-rbind(df,newrow)
       }
@@ -232,7 +244,7 @@ while( length(line) != 0 ) {
       #check if second person has exist
       if(is.element(TRUE,temp2) == FALSE){
         print("second person record not exists")
-        newrow <- data.frame(ped=NA,id = ID,father=NA,mother=NA,sex = NA,affected=NA,ava=NA,node=rline[3],name=NA,dob=NA,partner=NA,sg=NA)
+        newrow <- data.frame(ped=familyid,id = ID,father=NA,mother=NA,sex = NA,affected=NA,ava=NA,node=rline[3],name=NA,dob=NA,partner=NA,sg=NA)
         ID <- ID + 1
         df<-rbind(df,newrow)
           
@@ -261,7 +273,7 @@ while( length(line) != 0 ) {
         print("First person record not exists")
         
         #since coln is the column that parent store, coln-2 is gender
-        newrow <- data.frame(ped=NA,id = ID,father=NA,mother=NA,sex = NA,affected=NA,ava=NA,node=rline[1],name=NA,dob=NA,partner=NA,sg=NA)
+        newrow <- data.frame(ped=familyid,id = ID,father=NA,mother=NA,sex = NA,affected=NA,ava=NA,node=rline[1],name=NA,dob=NA,partner=NA,sg=NA)
         ID <- ID + 1
         df<-rbind(df,newrow)
         
@@ -270,7 +282,7 @@ while( length(line) != 0 ) {
       #check if second person has exist
       if (is.element(TRUE,temp2) == FALSE){
         print("second person record not exists")
-        newrow <- data.frame(ped=NA,id = ID,father=NA,mother=NA,sex = NA,affected=NA,ava=NA,node=rline[3],name=NA,dob=NA,partner=NA,sg=NA)
+        newrow <- data.frame(ped=familyid,id = ID,father=NA,mother=NA,sex = NA,affected=NA,ava=NA,node=rline[3],name=NA,dob=NA,partner=NA,sg=NA)
         ID <- ID + 1
         df<-rbind(df,newrow)
       }
@@ -331,30 +343,33 @@ while( length(line) != 0 ) {
         } else {                        # sister: female
           s = 2
         }
-        newrow <- data.frame(ped=NA,id=ID,father=f,mother=m,sex=NA,affected=NA,ava=NA,node=node2,name=NA,dob=NA,partner=NA,sg=c(node1))
+        newrow <- data.frame(ped=familyid,id=ID,father=f,mother=m,sex=NA,affected=NA,ava=NA,node=node2,name=NA,dob=NA,partner=NA,sg=c(node1))
         ID <- ID + 1
         df<-rbind(df,newrow)
       # if node2 not in dataframe
       } else if (!(node2 %in% df$node)) {
         f = df$father[index1]
         m = df$mother[index1]
-        newrow <- data.frame(ped=NA,id=ID,father=f,mother=m,sex=NA,affected=NA,ava=NA,node=node1,name=NA,dob=NA,partner=NA,sg=c(node2))
+        newrow <- data.frame(ped=familyid,id=ID,father=f,mother=m,sex=NA,affected=NA,ava=NA,node=node1,name=NA,dob=NA,partner=NA,sg=c(node2))
         ID <- ID + 1
         df<-rbind(df,newrow)
       # if both not in dataframe
       } else {
-        newrow <- data.frame(ped=NA,id=ID,father=NA,mother=NA,sex=NA,affected=NA,ava=NA,node=node1,name=NA,dob=NA,partner=NA,sg=c(node2))
+        newrow <- data.frame(ped=familyid,id=ID,father=NA,mother=NA,sex=NA,affected=NA,ava=NA,node=node1,name=NA,dob=NA,partner=NA,sg=c(node2))
         ID <- ID + 1
         df<-rbind(df,newrow)
-        newrow <- data.frame(ped=NA,id=ID,father=NA,mother=NA,sex=NA,affected=NA,ava=NA,node=node2,name=NA,dob=NA,partner=NA,sg=c(node1))
+        newrow <- data.frame(ped=familyid,id=ID,father=NA,mother=NA,sex=NA,affected=NA,ava=NA,node=node2,name=NA,dob=NA,partner=NA,sg=c(node1))
         ID <- ID + 1
         df<-rbind(df,newrow)
       }
     }
     
     #suggest in relation
-    strong_suggest(rline[1])
-    strong_suggest(rline[3])
+    if(ss == TRUE){
+      strong_suggest(rline[1])
+      strong_suggest(rline[3])
+    }
+
 # ======================================================
 # Alert user when syntax error with line #
 # ======================================================
@@ -376,6 +391,9 @@ while( length(line) != 0 ) {
 print_ped()
 close(con)
 
+# ======================================================
+# paraphase finished
+# ======================================================
 
 
 

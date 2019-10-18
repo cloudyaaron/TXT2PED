@@ -22,6 +22,9 @@ class Window(QWidget):
     def __init__(self):
         super(Window, self).__init__()
         self.resize(1024, 768)
+        self.ss = QCheckBox(self)
+        self.ss.setText('Strong suggest (testing)')
+        self.ss.move(10, 300)
         self.filename = './sample.txt'
         self.textline = QTextEdit(self)
         self.console = QTextBrowser(self)
@@ -69,8 +72,10 @@ class Window(QWidget):
         #pwd = self.textline.toPlainText()
         # pwd = pwd.replace("/", "\\")
         f.close()
-
         cmd = 'Rscript PedigreeEngine.R ' + self.filename
+        if self.ss.isChecked():
+            print('ss enable')
+            cmd = cmd+' -s'
 
         feedback = subprocess.check_output(cmd, shell=True)
 
