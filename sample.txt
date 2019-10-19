@@ -2,3 +2,4 @@ A gender_is male
 B gender_is female
 C gender_is female
 D name_is helo
+B mother_of A

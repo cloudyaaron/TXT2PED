@@ -1,4 +1,10 @@
 #!/usr/bin/env Rscript
+library(quadprog)
+library(Matrix)
+library(kinship2)
+#require(quadprog)
+#require(Matrix)
+#require(kinship2)
 
 # ======================================================
 # Function that check for the person's relationship (strong suggest)
@@ -54,7 +60,7 @@ ss <- FALSE
 args <- commandArgs(T)
 if (length(args) == 0){
   print("$Usage Rsript PedigreeEngine.R sample.txt")
-  args <- "E:\\study\\binf6112\\project\\test.txt"
+  args <- "E:\\study\\binf6112\\project\\test2.txt"
   #stop("exit")
   
 }else if (length(args) == 1){
@@ -145,7 +151,7 @@ while( length(line) != 0 ) {
       # if no record has been found
       if (is.element(TRUE,temp) == FALSE){
         #print("not exist. ADDING NEW ROW")
-        newrow <- data.frame(ped=familyid,id = ID,father=NA,mother=NA,sex = NA,affected=NA,ava=NA,node=aline[1],name=tname,dob=NA,partner=NA,sg=NA)
+        newrow <- data.frame(ped=familyid,id = ID,father=NA,mother=NA,sex = 3,affected=NA,ava=NA,node=aline[1],name=tname,dob=NA,partner=NA,sg=NA)
         ID <- ID + 1
         df<-rbind(df,newrow)
         
@@ -176,7 +182,7 @@ while( length(line) != 0 ) {
         index <- which(df$node == input_node)
         df$ava[index] = dead
       } else {
-        newrow <- data.frame(ped=familyid,id = ID,father=NA,mother=NA,sex = NA,affected=NA,ava=dead,node=aline[1],name=NA,dob=NA,partner=NA,sg=NA)
+        newrow <- data.frame(ped=familyid,id = ID,father=NA,mother=NA,sex = 3,affected=NA,ava=dead,node=aline[1],name=NA,dob=NA,partner=NA,sg=NA)
         ID <- ID + 1
         df<-rbind(df,newrow)
       }
@@ -193,7 +199,7 @@ while( length(line) != 0 ) {
         index <- which(df$node == input_node)
         df$dob[index] = DOB
       } else {
-        newrow <- data.frame(ped=familyid,id = ID,father=NA,mother=NA,sex = NA,affected=NA,ava=NA,node=aline[1],name=NA,dob=DOB,partner=NA,sg=NA)
+        newrow <- data.frame(ped=familyid,id = ID,father=NA,mother=NA,sex = 3,affected=NA,ava=NA,node=aline[1],name=NA,dob=DOB,partner=NA,sg=NA)
         ID <- ID + 1
         df<-rbind(df,newrow)
       }
@@ -244,7 +250,7 @@ while( length(line) != 0 ) {
       #check if second person has exist
       if(is.element(TRUE,temp2) == FALSE){
         print("second person record not exists")
-        newrow <- data.frame(ped=familyid,id = ID,father=NA,mother=NA,sex = NA,affected=NA,ava=NA,node=rline[3],name=NA,dob=NA,partner=NA,sg=NA)
+        newrow <- data.frame(ped=familyid,id = ID,father=NA,mother=NA,sex = 3,affected=NA,ava=NA,node=rline[3],name=NA,dob=NA,partner=NA,sg=NA)
         ID <- ID + 1
         df<-rbind(df,newrow)
           
@@ -273,7 +279,7 @@ while( length(line) != 0 ) {
         print("First person record not exists")
         
         #since coln is the column that parent store, coln-2 is gender
-        newrow <- data.frame(ped=familyid,id = ID,father=NA,mother=NA,sex = NA,affected=NA,ava=NA,node=rline[1],name=NA,dob=NA,partner=NA,sg=NA)
+        newrow <- data.frame(ped=familyid,id = ID,father=NA,mother=NA,sex = 3,affected=NA,ava=NA,node=rline[1],name=NA,dob=NA,partner=NA,sg=NA)
         ID <- ID + 1
         df<-rbind(df,newrow)
         
@@ -282,7 +288,7 @@ while( length(line) != 0 ) {
       #check if second person has exist
       if (is.element(TRUE,temp2) == FALSE){
         print("second person record not exists")
-        newrow <- data.frame(ped=familyid,id = ID,father=NA,mother=NA,sex = NA,affected=NA,ava=NA,node=rline[3],name=NA,dob=NA,partner=NA,sg=NA)
+        newrow <- data.frame(ped=familyid,id = ID,father=NA,mother=NA,sex = 3,affected=NA,ava=NA,node=rline[3],name=NA,dob=NA,partner=NA,sg=NA)
         ID <- ID + 1
         df<-rbind(df,newrow)
       }
@@ -343,22 +349,22 @@ while( length(line) != 0 ) {
         } else {                        # sister: female
           s = 2
         }
-        newrow <- data.frame(ped=familyid,id=ID,father=f,mother=m,sex=NA,affected=NA,ava=NA,node=node2,name=NA,dob=NA,partner=NA,sg=c(node1))
+        newrow <- data.frame(ped=familyid,id=ID,father=f,mother=m,sex = 3,affected=NA,ava=NA,node=node2,name=NA,dob=NA,partner=NA,sg=c(node1))
         ID <- ID + 1
         df<-rbind(df,newrow)
       # if node2 not in dataframe
       } else if (!(node2 %in% df$node)) {
         f = df$father[index1]
         m = df$mother[index1]
-        newrow <- data.frame(ped=familyid,id=ID,father=f,mother=m,sex=NA,affected=NA,ava=NA,node=node1,name=NA,dob=NA,partner=NA,sg=c(node2))
+        newrow <- data.frame(ped=familyid,id=ID,father=f,mother=m,sex = 3,affected=NA,ava=NA,node=node1,name=NA,dob=NA,partner=NA,sg=c(node2))
         ID <- ID + 1
         df<-rbind(df,newrow)
       # if both not in dataframe
       } else {
-        newrow <- data.frame(ped=familyid,id=ID,father=NA,mother=NA,sex=NA,affected=NA,ava=NA,node=node1,name=NA,dob=NA,partner=NA,sg=c(node2))
+        newrow <- data.frame(ped=familyid,id=ID,father=NA,mother=NA,sex = 3,affected=NA,ava=NA,node=node1,name=NA,dob=NA,partner=NA,sg=c(node2))
         ID <- ID + 1
         df<-rbind(df,newrow)
-        newrow <- data.frame(ped=familyid,id=ID,father=NA,mother=NA,sex=NA,affected=NA,ava=NA,node=node2,name=NA,dob=NA,partner=NA,sg=c(node1))
+        newrow <- data.frame(ped=familyid,id=ID,father=NA,mother=NA,sex = 3,affected=NA,ava=NA,node=node2,name=NA,dob=NA,partner=NA,sg=c(node1))
         ID <- ID + 1
         df<-rbind(df,newrow)
       }
@@ -396,11 +402,18 @@ close(con)
 # ======================================================
 
 
+# ======================================================
+# graph
+# ======================================================
 
 
 
-
-
+pedAll <- pedigree(id = df$id, dadid = df$father, momid = df$mother, 
+                   sex = df$sex, famid = df$ped)
+ped1basic <- pedAll["1"]
+jpeg('output.jpg')
+plot(ped1basic)
+dev.off()
 
 
 

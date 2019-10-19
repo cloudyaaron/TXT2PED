@@ -1,6 +1,8 @@
 #!/usr/bin/python
 
 import sys
+
+from PyQt5.QtGui import QPixmap
 from pip._internal import main
 import subprocess
 import platform
@@ -21,14 +23,18 @@ class Window(QWidget):
 
     def __init__(self):
         super(Window, self).__init__()
-        self.resize(1024, 768)
+        self.resize(1366, 768)
         self.ss = QCheckBox(self)
+        self.textline = QTextEdit(self)
+        self.console = QTextBrowser(self)
+        self.graphview = QLabel(self)
+        self.graphview.resize(600,600)
+        self.graphview.move(850,0)
         self.ss.setText('Strong suggest (testing)')
         self.ss.move(10, 300)
         self.filename = './sample.txt'
-        self.textline = QTextEdit(self)
-        self.console = QTextBrowser(self)
-        self.console.resize(700, 600)
+
+        self.console.resize(500, 500)
         self.console.move(300, 0)
         self.button = QPushButton(self)
         self.confirm = QPushButton(self)
@@ -76,9 +82,13 @@ class Window(QWidget):
         if self.ss.isChecked():
             print('ss enable')
             cmd = cmd+' -s'
-
-        feedback = subprocess.check_output(cmd, shell=True)
-        text = feedback.decode('utf-8')
+        try:
+            feedback = subprocess.check_output(cmd, shell=True)
+            text = feedback.decode('utf-8')
+            pic = QPixmap('output.jpg')
+            self.graphview.setPixmap(pic)
+        except:
+            text = 'error'
         self.console.setText(text)
 
 
