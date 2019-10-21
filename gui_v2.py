@@ -73,6 +73,7 @@ class GuiWindow(QWidget):
             pic = QPixmap('./src/blank.png')
             self.graphv.setPixmap(pic)
         self.console.setText(text)
+        self.refresh()
 
     # open a newfile and auto save current file
     def new_file(self):
@@ -100,7 +101,7 @@ class GuiWindow(QWidget):
         pic = QPixmap('./src/blank.png')
         self.graphv.setPixmap(pic)
         alert.exec_()
-        
+        self.refresh()
 
     def refresh(self):
         self.console.repaint()
