@@ -47,6 +47,7 @@ class GuiWindow(QWidget):
         ft = f.read()
         self.inputfield.setText(ft)
         f.close()
+        self.refresh()
 
     # show user what's in the file
     def preview(self):
@@ -79,7 +80,7 @@ class GuiWindow(QWidget):
     def new_file(self):
 
         text = self.inputfield.toPlainText()
-        f = open(self.filename, 'w', encoding='utf-8')
+        f = open(self.filename, 'w+', encoding='utf-8')
         f.write(text)
         f.close()
         index = 1

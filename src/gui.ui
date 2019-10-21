@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1057</width>
+    <width>1024</width>
     <height>624</height>
    </rect>
   </property>
@@ -16,10 +16,16 @@
     <verstretch>0</verstretch>
    </sizepolicy>
   </property>
+  <property name="minimumSize">
+   <size>
+    <width>800</width>
+    <height>600</height>
+   </size>
+  </property>
   <property name="maximumSize">
    <size>
-    <width>16777215</width>
-    <height>16777215</height>
+    <width>1366</width>
+    <height>768</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -30,7 +36,7 @@
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0">
-    <layout class="QHBoxLayout" name="Hbox" stretch="10,5,0">
+    <layout class="QHBoxLayout" name="Hbox" stretch="10,7,0">
      <property name="spacing">
       <number>30</number>
      </property>
@@ -38,8 +44,8 @@
       <widget class="QLabel" name="graphv">
        <property name="maximumSize">
         <size>
-         <width>800</width>
-         <height>800</height>
+         <width>600</width>
+         <height>600</height>
         </size>
        </property>
        <property name="frameShape">

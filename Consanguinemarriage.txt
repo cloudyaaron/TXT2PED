@@ -1,0 +1,12 @@
+A father_of B
+C mother_of B
+A father_of D
+C mother_of D
+A father_of E
+C mother_of E
+A father_of E
+C mother_of E
+A father_of F
+C mother_of F
+D father_of H
+E mother_of H
