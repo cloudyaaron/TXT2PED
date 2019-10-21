@@ -1,12 +1,7 @@
-A gender_is male
 A father_of B
-A partner_of E
 E mother_of B
-E gender_is female
-B gender_is male
-A name_is "john cena"
-Z partner_of B
 B father_of F
-Z gender_is female
 Z mother_of F
-F gender_is female
+Z mother_of C
+B father_of C
+AA father_of C

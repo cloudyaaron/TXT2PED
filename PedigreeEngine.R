@@ -264,6 +264,7 @@ while( length(line) != 0 ) {
           
       #should suggest gender in here?
       #gender has been suggest aboved
+      df[indexa,'sex'] <- coln-2
       df[indexb,coln] <- df[indexa,2]
 
       

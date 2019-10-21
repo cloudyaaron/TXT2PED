@@ -1471,6 +1471,7 @@
       <w>airquality</w>
       <w>alarm</w>
       <w>alias</w>
+      <w>align.pedigree</w>
       <w>alist</w>
       <w>all</w>
       <w>all.equal</w>
@@ -1628,6 +1629,7 @@
       <w>as.data.frame.numeric</w>
       <w>as.data.frame.numeric_version</w>
       <w>as.data.frame.ordered</w>
+      <w>as.data.frame.pedigree</w>
       <w>as.data.frame.raw</w>
       <w>as.data.frame.table</w>
       <w>as.data.frame.ts</w>
@@ -1790,6 +1792,7 @@
       <w>austres</w>
       <w>authenticate</w>
       <w>auto_name</w>
+      <w>autohint</w>
       <w>autolayer</w>
       <w>autoload</w>
       <w>autoloader</w>
@@ -1893,6 +1896,7 @@
       <w>biopsy</w>
       <w>biplot</w>
       <w>birthwt</w>
+      <w>bitSize</w>
       <w>bitmap</w>
       <w>bitwAnd</w>
       <w>bitwNot</w>
@@ -3006,6 +3010,7 @@
       <w>faithful</w>
       <w>faithfuld</w>
       <w>family</w>
+      <w>familycheck</w>
       <w>fanny</w>
       <w>fansi</w>
       <w>fansi_lines</w>
@@ -3093,6 +3098,8 @@
       <w>finalDefaultMethod</w>
       <w>find</w>
       <w>find.package</w>
+      <w>findAvailAffected</w>
+      <w>findAvailNonInform</w>
       <w>findClass</w>
       <w>findDependencies</w>
       <w>findFun</w>
@@ -3109,6 +3116,7 @@
       <w>findMethods</w>
       <w>findPackageEnv</w>
       <w>findRestart</w>
+      <w>findUnavailable</w>
       <w>findUnique</w>
       <w>find_data</w>
       <w>find_external_resources</w>
@@ -3137,6 +3145,7 @@
       <w>fix.family.var</w>
       <w>fixDependence</w>
       <w>fixInNamespace</w>
+      <w>fixParents</w>
       <w>fixPre1.8</w>
       <w>fix_data_frame</w>
       <w>fix_mnsl</w>
@@ -3809,6 +3818,7 @@
       <w>hue_slice</w>
       <w>hvc2mnsl</w>
       <w>hypothesize</w>
+      <w>ibdMatrix</w>
       <w>iconv</w>
       <w>iconvlist</w>
       <w>icuGetCollate</w>
@@ -4146,6 +4156,10 @@
       <w>kernapply</w>
       <w>kernel</w>
       <w>kidney</w>
+      <w>kindepth</w>
+      <w>kinship</w>
+      <w>kinship.default</w>
+      <w>kinship2</w>
       <w>kmeans</w>
       <w>knit</w>
       <w>knit2html</w>
@@ -4277,6 +4291,7 @@
       <w>learn</w>
       <w>legend</w>
       <w>legendGrob</w>
+      <w>legendPlot</w>
       <w>length</w>
       <w>length.POSIXlt</w>
       <w>lengths</w>
@@ -4509,6 +4524,8 @@
       <w>make_spinner</w>
       <w>make_style</w>
       <w>make_translations_pkg</w>
+      <w>makefamid</w>
+      <w>makekinship</w>
       <w>makepredictcall</w>
       <w>makevars_site</w>
       <w>makevars_user</w>
@@ -4636,6 +4653,7 @@
       <w>minify</w>
       <w>minimal_html</w>
       <w>minn38</w>
+      <w>minnbreast</w>
       <w>minute</w>
       <w>minutes</w>
       <w>mirror2html</w>
@@ -5180,6 +5198,11 @@
       <w>pdfFonts</w>
       <w>pdf_document</w>
       <w>pdflatex</w>
+      <w>pedigree</w>
+      <w>pedigree.legend</w>
+      <w>pedigree.shrink</w>
+      <w>pedigree.trim</w>
+      <w>pedigree.unrelated</w>
       <w>peek_vars</w>
       <w>pen.edf</w>
       <w>percent</w>
@@ -5235,6 +5258,8 @@
       <w>plot.gam</w>
       <w>plot.lme</w>
       <w>plot.new</w>
+      <w>plot.pedigree</w>
+      <w>plot.pedigree.shrink</w>
       <w>plot.spec.coherency</w>
       <w>plot.spec.phase</w>
       <w>plot.stepfun</w>
@@ -5387,6 +5412,8 @@
       <w>print.numeric_version</w>
       <w>print.octmode</w>
       <w>print.packageInfo</w>
+      <w>print.pedigree</w>
+      <w>print.pedigree.shrink</w>
       <w>print.proc_time</w>
       <w>print.restart</w>
       <w>print.rle</w>
@@ -5399,6 +5426,7 @@
       <w>print.summaryDefault</w>
       <w>print.table</w>
       <w>print.warnings</w>
+      <w>printBanner</w>
       <w>printCoefmat</w>
       <w>printSpMatrix</w>
       <w>printSpMatrix2</w>
@@ -5556,6 +5584,7 @@
       <w>qt</w>
       <w>qtukey</w>
       <w>quade.test</w>
+      <w>quadprog</w>
       <w>quakes</w>
       <w>qualitative_hcl</w>
       <w>quantile</w>
@@ -6005,6 +6034,7 @@
       <w>sammon</w>
       <w>sample</w>
       <w>sample.int</w>
+      <w>sample.ped</w>
       <w>sans_ext</w>
       <w>sapply</w>
       <w>saturate</w>
@@ -6402,6 +6432,8 @@
       <w>socketSelect</w>
       <w>solder</w>
       <w>solve</w>
+      <w>solve.QP</w>
+      <w>solve.QP.compact</w>
       <w>solve.default</w>
       <w>solve.qr</w>
       <w>somgrid</w>
@@ -7118,6 +7150,7 @@
       <w>test_load</w>
       <w>test_register_con</w>
       <w>test_register_src</w>
+      <w>testped1</w>
       <w>texi2dvi</w>
       <w>texi2pdf</w>
       <w>text</w>

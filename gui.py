@@ -6,6 +6,7 @@ from PyQt5.QtGui import QPixmap
 from pip._internal import main
 import subprocess
 import platform
+
 # from PyQt5 import QtCore
 try:
     from PyQt5.QtWidgets import *
@@ -26,13 +27,15 @@ class Window(QWidget):
         self.resize(1366, 768)
         self.ss = QCheckBox(self)
         self.textline = QTextEdit(self)
+        self.textline.resize(300,500)
         self.console = QTextBrowser(self)
         self.graphview = QLabel(self)
-        self.graphview.resize(600,600)
-        self.graphview.move(850,0)
+        self.graphview.resize(600, 600)
+        self.graphview.move(850, 0)
         self.ss.setText('Strong suggest (testing)')
-        self.ss.move(10, 300)
-        self.filename = './sample.txt'
+        self.ss.move(10, 600)
+        self.g = QGraphicsView()
+        self.filename = './src/sample.txt'
 
         self.console.resize(500, 500)
         self.console.move(300, 0)
@@ -52,8 +55,6 @@ class Window(QWidget):
         self.textline.setText(ft)
         f.close()
 
-
-
     def open_dic(self):
         file, file_type = QFileDialog.getOpenFileName(self, "open", "./", "TEXT FILES (*.txt)")  #
 
@@ -67,7 +68,6 @@ class Window(QWidget):
         self.textline.setText(ft)
         f.close()
 
-
     # show user what's in the file
     def preview(self):
         self.confirm.setEnabled(True)
@@ -75,31 +75,33 @@ class Window(QWidget):
         text = self.textline.toPlainText()
         f = open(self.filename, 'w', encoding='utf-8')
         f.write(text)
-        #pwd = self.textline.toPlainText()
+        # pwd = self.textline.toPlainText()
         # pwd = pwd.replace("/", "\\")
         f.close()
         cmd = 'Rscript PedigreeEngine.R ' + self.filename
         if self.ss.isChecked():
             print('ss enable')
-            cmd = cmd+' -s'
+            cmd = cmd + ' -s'
         try:
             feedback = subprocess.check_output(cmd, shell=True)
             text = feedback.decode('utf-8')
             pic = QPixmap('output.jpg')
             self.graphview.setPixmap(pic)
         except:
-            text = 'error'
+            f = open('output.ped', 'r', encoding='utf-8')
+            text = f.read()
+            text = text + '\n Error occur'
+            f.close()
         self.console.setText(text)
 
 
 # Welcome menu need more polish and ui friendly design
 class StartWindow(QWidget):
     def __init__(self):
-
         super(StartWindow, self).__init__()
         self.resize(1024, 768)
         self.ui = Window()
-        self.setWindowTitle('BINF6112')
+        self.setWindowTitle('BINF6112 Pedigree Engine')
         self.start_button = QPushButton(self)
         self.start_button.setText("start choose file")
         self.start_button.move(400, 384)
