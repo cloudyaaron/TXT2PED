@@ -48,7 +48,7 @@ strong_suggest <- function(node){
 # give a .ped file in the same folder
 # ======================================================
 print_ped <- function(){
-  write.csv(df[,1:7],file = "output.ped")
+  write.csv(df[,1:7],file = "./output/output.ped")
 }
 
 
@@ -60,7 +60,7 @@ ss <- FALSE
 args <- commandArgs(T)
 if (length(args) == 0){
   print("$Usage Rsript PedigreeEngine.R sample.txt")
-  args <- "E:\\study\\binf6112\\project\\test2.txt"
+  args <- "E:\\study\\binf6112\\project\\test.txt"
   #stop("exit")
   
 }else if (length(args) == 1){
@@ -188,7 +188,7 @@ while( length(line) != 0 ) {
       }
 
 # ======================================================
-# attribute: decaeased_is
+# attribute: DOB_is
 # ======================================================  
     } else if (aline[2] == "DOB_is"){
       input_node <- aline[1]
@@ -203,12 +203,17 @@ while( length(line) != 0 ) {
         ID <- ID + 1
         df<-rbind(df,newrow)
       }
+    }else {
+      showerror <- paste("line ",linenum, " has unexpected attributes")
+      print(showerror)
+      break
     }
     
     #suggest the info with current info
     if(ss == TRUE){
       strong_suggest(aline[1])
-    }
+    } 
+
     
 # ======================================================
 # Relation paraphase
@@ -233,7 +238,11 @@ while( length(line) != 0 ) {
       } else{
         coln <- 4
       }
+      if (grepl(',', rline[3]) == TRUE){
+        print("muti son")
+        break
       
+      }
       temp <- df$node == rline[1]
       temp2 <- df$node == rline[3]
       
@@ -377,6 +386,7 @@ while( length(line) != 0 ) {
       strong_suggest(rline[3])
     }
 
+    
 # ======================================================
 # Alert user when syntax error with line #
 # ======================================================
@@ -407,14 +417,27 @@ close(con)
 # graph
 # ======================================================
 
-
-
-pedAll <- pedigree(id = df$id, dadid = df$father, momid = df$mother, 
-                   sex = df$sex, famid = df$ped)
-ped1basic <- pedAll["1"]
-jpeg('output.jpg')
-plot(ped1basic)
-dev.off()
+logf <- file('./output/log.txt','w')
+out <- tryCatch({
+  pedAll <- pedigree(id = df$id, dadid = df$father, momid = df$mother, 
+                     sex = df$sex, famid = df$ped)
+  ped1basic <- pedAll["1"]
+  jpeg('./output/output.jpg')
+  plot(ped1basic)
+  dev.off()
+  },
+  error = function(cond){
+    msg <-  "fatal error occur, plz remember what has been input and contact the dev group"
+    print(msg)
+    print(cond)
+  },
+  warning  = function(cond){
+    msg <- 'warnning occur'
+    print(msg)
+    print(cond)
+  },
+  finallly = {}
+)
 
 
 

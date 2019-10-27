@@ -95,7 +95,10 @@
         </widget>
        </item>
        <item>
-        <widget class="QTextBrowser" name="console">
+        <widget class="QTextEdit" name="console">
+         <property name="focusPolicy">
+          <enum>Qt::NoFocus</enum>
+         </property>
          <property name="frameShape">
           <enum>QFrame::Panel</enum>
          </property>

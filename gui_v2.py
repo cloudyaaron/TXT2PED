@@ -35,6 +35,8 @@ class GuiWindow(QWidget):
         self.generatebutton.clicked.connect(self.preview)
         self.newfilebutton.clicked.connect(self.new_file)
 
+
+
     def open_dic(self):
         file, file_type = QFileDialog.getOpenFileName(self, "open", "./", "TEXT FILES (*.txt)")  #
 
@@ -61,13 +63,13 @@ class GuiWindow(QWidget):
         if self.sscheckbox.isChecked():
             print('ss enable')
             cmd = cmd + ' -s'
-        f = open('output.ped', 'r', encoding='utf-8')
+        f = open('./output/output.ped', 'r', encoding='utf-8')
         text = f.read()
         f.close()
         try:
             feedback = subprocess.check_output(cmd, shell=True)
             text = feedback.decode('utf-8')
-            pic = QPixmap('output.jpg')
+            pic = QPixmap('./output/output.jpg')
             self.graphv.setPixmap(pic)
         except:
             text = text + '\n Error occur'
@@ -108,6 +110,7 @@ class GuiWindow(QWidget):
         self.console.repaint()
         self.graphv.repaint()
         self.inputfield.repaint()
+        self.console.moveCursor(self.console.textCursor().End)
 
 
 if __name__ == "__main__":
