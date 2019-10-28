@@ -238,13 +238,10 @@ while( length(line) != 0 ) {
       } else{
         coln <- 4
       }
-      if (grepl(',', rline[3]) == TRUE){
-        print("muti son")
-        break
-      
-      }
       temp <- df$node == rline[1]
       temp2 <- df$node == rline[3]
+
+
       
       #check first person exist?
       if (is.element(TRUE,temp) == FALSE){
@@ -256,15 +253,23 @@ while( length(line) != 0 ) {
         df<-rbind(df,newrow)
       }
         
+      #if there is more than one children
+      if (grepl(',', rline[3]) == TRUE){
+        children <<- unlist(strsplit(rline[3],','))
+        print('many childrens')
+        for (child in children){
+          print(child)
+        }
+      } else {
       #check if second person has exist
-      if(is.element(TRUE,temp2) == FALSE){
-        print("second person record not exists")
-        newrow <- data.frame(ped=familyid,id = ID,father=NA,mother=NA,sex = 3,affected=NA,ava=NA,node=rline[3],name=NA,dob=NA,partner=NA,sg=NA)
-        ID <- ID + 1
-        df<-rbind(df,newrow)
-          
+        if(is.element(TRUE,temp2) == FALSE){
+          print("second person record not exists")
+          newrow <- data.frame(ped=familyid,id = ID,father=NA,mother=NA,sex = 3,affected=NA,ava=NA,node=rline[3],name=NA,dob=NA,partner=NA,sg=NA)
+          ID <- ID + 1
+          df<-rbind(df,newrow)
+            
+        }
       }
-      
       #edit current record
       temp <- df$node == rline[1]
       temp2 <- df$node == rline[3]

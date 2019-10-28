@@ -3,4 +3,4 @@ B mother_of C
 C gender_is male
 C name_is 'John'
 A DOB_is 17/11/1990
-TypeError: textCursor(self): first argument of unbound method must have type 'QTextEdit'
+sad
