@@ -258,7 +258,11 @@ while( length(line) != 0 ) {
         children <<- unlist(strsplit(rline[3],','))
         print('many childrens')
         for (child in children){
-          print(child)
+          if (!(child %in% df$node)){
+            newrow <- data.frame(ped=familyid,id = ID,father=NA,mother=NA,sex = 3,affected=NA,ava=NA,node = child,name=NA,dob=NA,partner=NA,sg=NA)
+            ID <- ID + 1
+            df<-rbind(df,newrow)
+          }
         }
       } else {
       #check if second person has exist
@@ -267,19 +271,20 @@ while( length(line) != 0 ) {
           newrow <- data.frame(ped=familyid,id = ID,father=NA,mother=NA,sex = 3,affected=NA,ava=NA,node=rline[3],name=NA,dob=NA,partner=NA,sg=NA)
           ID <- ID + 1
           df<-rbind(df,newrow)
-            
+          children <<- c(rline[3])
         }
       }
-      #edit current record
-      temp <- df$node == rline[1]
-      temp2 <- df$node == rline[3]
-      indexa <- which(temp == TRUE)
-      indexb <- which(temp2 == TRUE)
-          
-      #should suggest gender in here?
-      #gender has been suggest aboved
-      df[indexa,'sex'] <- coln-2
-      df[indexb,coln] <- df[indexa,2]
+      print(children)
+      
+      # change parent into appropriet gender
+      parentindex <- which(df$node == rline[1])
+      df[parentindex,'sex'] <- coln-2
+      
+      #change children or single child parent's col
+      for(child in children){
+        childindex <- which(df$node == child)
+        df[childindex,coln] <- df[parentindex,2]
+      }
 
       
 # ======================================================
@@ -422,7 +427,6 @@ close(con)
 # graph
 # ======================================================
 
-logf <- file('./output/log.txt','w')
 out <- tryCatch({
   pedAll <- pedigree(id = df$id, dadid = df$father, momid = df$mother, 
                      sex = df$sex, famid = df$ped)
@@ -435,13 +439,27 @@ out <- tryCatch({
     msg <-  "fatal error occur, plz remember what has been input and contact the dev group"
     print(msg)
     print(cond)
+    pedAll <- pedigree(id = df$id, dadid = df$father, momid = df$mother, 
+                       sex = df$sex, famid = df$ped)
+    ped1basic <- pedAll["1"]
+    jpeg('./output/output.jpg')
+    plot(ped1basic)
+    dev.off()
   },
   warning  = function(cond){
     msg <- 'warnning occur'
     print(msg)
     print(cond)
+    pedAll <- pedigree(id = df$id, dadid = df$father, momid = df$mother, 
+                       sex = df$sex, famid = df$ped)
+    ped1basic <- pedAll["1"]
+    jpeg('./output/output.jpg')
+    plot(ped1basic)
+    dev.off()
   },
-  finallly = {}
+  finallly = {
+    write.csv(df[,1:10],'./output/log.txt')
+    dev.off}
 )
 
 

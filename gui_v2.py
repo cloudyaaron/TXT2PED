@@ -63,7 +63,7 @@ class GuiWindow(QWidget):
         if self.sscheckbox.isChecked():
             print('ss enable')
             cmd = cmd + ' -s'
-        f = open('./output/output.ped', 'r', encoding='utf-8')
+        f = open('./output/log.txt', 'r', encoding='utf-8')
         text = f.read()
         f.close()
         try:
@@ -71,8 +71,9 @@ class GuiWindow(QWidget):
             text = feedback.decode('utf-8')
             pic = QPixmap('./output/output.jpg')
             self.graphv.setPixmap(pic)
-        except:
-            text = text + '\n Error occur'
+        except subprocess.CalledProcessError as e:
+
+            text = text + '\n Error occur\n' + e.output.decode()
             pic = QPixmap('./src/blank.png')
             self.graphv.setPixmap(pic)
         self.console.setText(text)
