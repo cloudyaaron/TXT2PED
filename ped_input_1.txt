@@ -1,1 +1,2 @@
-A father_of B,C
+D father_of C,F
+E partner_of D

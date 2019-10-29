@@ -3,4 +3,8 @@ B mother_of C
 C gender_is male
 C name_is 'John'
 A DOB_is 17/11/1990
-sad
+A decaeased_is true
+A affected_is true
+B affected_is true
+B decaeased_is true
+C affected_is false
