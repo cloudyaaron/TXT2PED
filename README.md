@@ -6,22 +6,9 @@ In most clinical settings, pedigree charts are still drawn by hand on paper, whi
 
 In this project, we aim to develop a pedigree drawing engine that can create pedigree charts as the example above from simple textual descriptions. The concept is similar to Graphviz (https://www.graphviz.org/) and mermaid (https://mermaidjs.github.io/), two projects that allow creating graphs and diagrams using a simple text syntax.
 
-For example, the above pedigree drawing could be created through simple descriptions like:
+=== To be able to use this pedigree engine, R need to be installed. To have a better experience, python3 will be required to install. Python wil auto install any needed python package. But R module kinship2 needed manual install. To install kinship 2 use command 'install.packages('kinship 2') in R console.====
 
-ID#1 has_name “Jasmine Smith-Doe”
-ID#1 has_mother ID#3
-ID#1 has_sister ID#2
 
-First Meeting Notes
-After our first meeting on Sept 20, we updated the workflow as follows:
-I want to be able to describe family relations with simple text descriptions such as 'A has_father B'. These text descriptions should be translated into a PED file and a pedigree drawing.
-The pedigree drawing should be updated each time a new command is added, to provide feedback on what the pedigree looks like. Conceptually similar to this video on DiagrammerR:
-https://rich-iannone.github.io/DiagrammeR/mov/DiagrammeR.mp4
-DiagrammeR (an R implementation of the Graphvis dot language) could be used to create the pedigree drawings if the layout engine can be tweaked to follow the pedigree diagram rules (all edges are straight lines, only use right angles etc). Alternatively, the pedigree drawings can be created using the kinship2 package. 
-The application should calculate or guess missing information wherever possible. For example:
-‘A has_son B’ implies that B is ‘male’, so this property should be set automatically
-every person in a PED file has to have 2 parents. Thus the statement 'A has_son B' needs to create a PED file with entries for individuals A and B, but also for the mother of B.
-‘A has_sister B’ implies that B is ‘female’ and that A and B have the same 2 parents
 The list of all possible terms is listed below. 
 List of Terms:
 Individuals (Nodes)
