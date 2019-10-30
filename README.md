@@ -6,7 +6,7 @@ In most clinical settings, pedigree charts are still drawn by hand on paper, whi
 
 In this project, we aim to develop a pedigree drawing engine that can create pedigree charts as the example above from simple textual descriptions. The concept is similar to Graphviz (https://www.graphviz.org/) and mermaid (https://mermaidjs.github.io/), two projects that allow creating graphs and diagrams using a simple text syntax.
 
-**=== To be able to use this pedigree engine, R need to be installed. To have a better experience, python3 will be required to install. Python wil auto install any needed python package. But R module kinship2 needed manual install. To install kinship 2 use command 'install.packages('kinship 2') in R console.==== **
+**To be able to use this pedigree engine, R need to be installed. To have a better experience, python3 will be required to install. Python wil auto install any needed python package. But R module kinship2 needed manual install. To install kinship 2 use command 'install.packages('kinship 2') in R console.**
 
 
 The list of all possible input is listed below. 
@@ -22,9 +22,9 @@ A DOSB_is "13 Oct 1970"
 
 A affect_is true
 
-~~A affected_with X ~~
+~~A affected_with X~~
 
-~~affected_with X,Y,Z (up to 4 diseases) ~~
+~~affected_with X,Y,Z (up to 4 diseases)~~
 
 
 Relationships (Edges):
