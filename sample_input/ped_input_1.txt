@@ -1,2 +1,3 @@
 D father_of C,F
 E partner_of D
+D affected_is true

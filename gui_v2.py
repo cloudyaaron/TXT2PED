@@ -59,7 +59,7 @@ class GuiWindow(QWidget):
         f = open(self.filename, 'w', encoding='utf-8')
         f.write(text)
         f.close()
-        cmd = 'Rscript PedigreeEngine.R ' + self.filename
+        cmd = 'Rscript ./src/R_core.R ' + self.filename
         if self.sscheckbox.isChecked():
             print('ss enable')
             cmd = cmd + ' -s'
