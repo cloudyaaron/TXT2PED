@@ -1,3 +1,4 @@
 D father_of C,F
 E partner_of D
 D affected_is true
+C,F gender_is male

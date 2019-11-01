@@ -108,6 +108,7 @@ while( length(line) != 0 ) {
     if(aline[2] == "gender_is"){
       
       #gender 1 is male, 2 is female, 3 is unknown
+
       if(aline[3] == "male"){
         gender = 1
       }else if(aline[3]=="female"){
@@ -115,23 +116,38 @@ while( length(line) != 0 ) {
       }else{
         gender = 3
       }
-      temp <- df$node == aline[1]
+      if (grepl(",",aline[1]) == TRUE){
+        people <- unlist(strsplit(aline[1],','))
+        
+        for (pe in people){
+          peindex <- which(df$node == pe)
+
+          df[peindex,'sex'] <- gender
+        }
+      } else {
+        
+    
+        temp <- df$node == aline[1]
+        
+        #if not found in previous record
+        if (is.element(TRUE,temp) == FALSE){
+          #print("not exist. ADDING NEW ROW")
+          newrow <- data.frame(ped=familyid,id = ID,father=NA,mother=NA,sex = gender,affected=NA,ava=0,node=aline[1],name=NA,dob=NA,partner=NA,sg=NA)
+          ID <- ID + 1
+          df<-rbind(df,newrow)
+          
+          #otherwise edit the current record
+        } else{
+          #print("record exist")
+          index <- which(temp == TRUE)
+          
+          #col 5 is gender
+          df[index,5] <- gender
+        }
       
-      #if not found in previous record
-      if (is.element(TRUE,temp) == FALSE){
-        #print("not exist. ADDING NEW ROW")
-        newrow <- data.frame(ped=familyid,id = ID,father=NA,mother=NA,sex = gender,affected=NA,ava=0,node=aline[1],name=NA,dob=NA,partner=NA,sg=NA)
-        ID <- ID + 1
-        df<-rbind(df,newrow)
-        
-        #otherwise edit the current record
-      } else{
-        #print("record exist")
-        index <- which(temp == TRUE)
-        
-        #col 5 is gender
-        df[index,5] <- gender
       }
+      
+      
       #suggest gender to other relate people (wife or husband)
       
       # ======================================================
