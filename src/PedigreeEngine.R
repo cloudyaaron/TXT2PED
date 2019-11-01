@@ -76,7 +76,9 @@ ss <- FALSE
 
 producePED <- function(inFile) {
   file_name = as.character(inFile['name'])
-  con <- file(file_name,"r")
+  file_path = paste0("./sample_input/", file_name)
+  print(file_path)
+  con <- file(file_path,"r")
   #read line one by one by the provindg file
   line <- readLines(con, n = 1)
   linenum <- 1
