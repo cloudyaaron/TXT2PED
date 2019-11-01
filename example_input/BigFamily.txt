@@ -1,0 +1,16 @@
+A father_of B
+C mother_of B
+A father_of D
+C mother_of D
+A father_of E
+C mother_of E
+B gender_is male
+D gender_is female
+E gender_is male
+B father_of F
+G mother_of F
+B father_of H
+G mother_of H
+F gender_is female
+D mother_of I
+J father_of I

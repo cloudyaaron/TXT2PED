@@ -1,0 +1,5 @@
+A father_of C
+B mother_of C
+C gender_is male
+C affected_is true
+B affected_is false

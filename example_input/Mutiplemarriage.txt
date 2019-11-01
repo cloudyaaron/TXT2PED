@@ -1,0 +1,7 @@
+A father_of B
+E mother_of B
+B father_of F
+Z mother_of F
+Z mother_of C
+B father_of C
+AA father_of C

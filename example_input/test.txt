@@ -1,0 +1,8 @@
+A father_of B
+C partner_of A
+C affected_is true
+C decaeased_is true
+A affected_is false
+B gender_is male
+B decaeased_is true
+B affected_is false
