@@ -6,42 +6,7 @@ library(kinship2)
 #require(Matrix)
 #require(kinship2)
 
-# ======================================================
-# Function that check for the person's relationship (strong suggest)
-# ======================================================
-strong_suggest <- function(node){
-  print(paste("strong suggest:",node))
-  index <- which(df$node == node)
-  
-  #detect if node has a gender
-  if(!is.na(df[index,'sex'])){
 
-    #if the node with gender has a partner
-    if(!is.na(df[index,'partner'])){
-      partner_index <- which(df$id == df[index,'partner'])
-      #if partner node has no sex yet, assign sex for them
-      if(is.na(df[partner_index,'sex'])){
-        if(df[index,'sex']==2){
-          df[partner_index,'sex'] <<- 1
-        }else if(df[index,'partner']==1){
-          df[partner_index,'sex'] <<- 2
-        }else{
-          df[partner_index,'sex'] <<- 3
-        }
-      }
-      
-    #if current node has no gender try to find a gender for node
-    }else{
-     
-    }
-  }
-  #detect if node has a sg
-  
-  #detect if node has a partner
-  
-  #detect if node is father or mother of others
-  
-}
 
 
 # ======================================================
@@ -52,30 +17,16 @@ print_ped <- function(df){
 }
 
 
-# ======================================================
-# main start
-# ======================================================
-#pasing the argument in to the rscript
-ss <- FALSE
-# args <- commandArgs(T)
-# if (length(args) == 0){
-#   print("$Usage Rsript PedigreeEngine.R sample.txt")
-#   args <- "E:\\study\\binf6112\\project\\test.txt"
-#   #stop("exit")
-#   
-# }else if (length(args) == 1){
-#   print(args)
-# }else if (length(args) == 2 && args[2] == '-s'){
-#   print("Strong suggest open")
-#   print(args)
-#   ss <<- TRUE
-# } else{
-#   print("$Usage Rsript PedigreeEngine.R sample.txt")
-#   stop("exit")
-# }
+preview <- function(path){
+  
+}
+
+
 
 producePED <- function(inFile) {
-  file_name = as.character(inFile['name'])
+  #print(inFile)
+  file_name = as.character(inFile)
+  #print(file_name)
   con <- file(file_name,"r")
   #read line one by one by the provindg file
   line <- readLines(con, n = 1)
@@ -234,9 +185,7 @@ producePED <- function(inFile) {
       }
       
       #suggest the info with current info
-      if(ss == TRUE){
-        strong_suggest(aline[1])
-      } 
+
   
       
   # ======================================================
@@ -441,11 +390,7 @@ producePED <- function(inFile) {
       }
       
       #suggest in relation
-      if(ss == TRUE){
-        strong_suggest(rline[1])
-        strong_suggest(rline[3])
-      }
-  
+ 
       
   # ======================================================
   # Alert user when syntax error with line #
