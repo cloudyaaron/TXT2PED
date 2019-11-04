@@ -43,6 +43,10 @@ ui <- fluidPage(
 
 # Define server logic ----
 server <- function(input, output, session) {
+
+  dataUpload = reactiveValues(
+    ped_folder = NULL
+  )
   
   volumes <- getVolumes()
   
