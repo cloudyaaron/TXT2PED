@@ -16,3 +16,5 @@ gen
 # R history and R datat
 .Rhistory
 .Rdata
+
+.DS_Store

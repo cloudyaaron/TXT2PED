@@ -45,14 +45,14 @@ ui <- fluidPage(
 server <- function(input, output, session) {
   volumes <- getVolumes()
   shinyDirChoose(input, 'pedLocation', roots=volumes, session=session)
-  
+  ped_folder = ''
   observeEvent(input$pedLocation, {
-    dataUpload$ped_folder = toString(parseDirPath(volumes, input$pedLocation))
+    ped_folder = toString(parseDirPath(volumes, input$pedLocation))
   })
   
   output$pedDirectory <- renderUI({
-    if (dataUpload$ped_folder != '' && ! is.null(dataUpload$ped_folder)) {
-      helpText(HTML(paste0("<b>Selected directory:</b> ", dataUpload$ped_folder)))
+    if (ped_folder != '' && ! is.null(ped_folder)) {
+      helpText(HTML(paste0("<b>Selected directory:</b> ", ped_folder)))
     }
   })
 
