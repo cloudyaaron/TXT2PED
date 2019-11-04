@@ -71,8 +71,9 @@ server <- function(input, output,session) {
   
   #update preview box
   observeEvent(input$generatebutton,{
+    text <- preview(input$file1$datapath)
     updateTextAreaInput(session,'inputbox',
-      value = 'yo'                        
+      value = text                        
                         )
   })
   

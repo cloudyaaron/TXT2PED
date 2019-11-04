@@ -18,7 +18,19 @@ print_ped <- function(df){
 
 
 preview <- function(path){
+
+  file_name = as.character(path)
+  con <- file(file_name,"r")
+  line <- readLines(con, n = 1)
   
+ 
+  while( length(line) != 0 ) {
+    t <- paste(t,line,collapse = '')
+    line<-readLines(con,n=1)
+    print(t)
+  }
+  close(con)
+  return(t)
 }
 
 
@@ -404,7 +416,9 @@ producePED <- function(inFile) {
     #can have nore function
     
     #show the dataframe after reading eachline
-    print(df)
+    
+    
+    #print(df)
     #Set to nextline
     line<-readLines(con,n=1)
     linenum <- linenum + 1
