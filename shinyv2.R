@@ -42,8 +42,8 @@ ui <- fluidPage(
 )
 
 # Define server logic ----
-server <- function(input, output) {
-
+server <- function(input, output, session) {
+  volumes <- getVolumes()
   shinyDirChoose(input, 'pedLocation', roots=volumes, session=session)
   
   observeEvent(input$pedLocation, {
@@ -59,7 +59,9 @@ server <- function(input, output) {
   output$image <- renderImage({
     relation_file <- input$file1
     if (is.null(relation_file)) return(NULL)
-    out_jpg_path <- producePED(relation_file)
+    file_name <- as.character(relation_file['name'])
+    file_path <- file.path(getwd(), "sample_input", file_name)
+    out_jpg_path <- producePED(file_path)
     pedigree <- normalizePath(file.path(out_jpg_path))
     list(src = pedigree)
   })
