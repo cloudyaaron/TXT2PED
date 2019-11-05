@@ -5,7 +5,7 @@ library(dplyr)
 library(ggplot2)
 library(shinydashboard)
 library(leaflet)
-source("./src/PedigreeEngine.R")
+#source("./src/PedigreeEngine.R")
 
 # Define UI ----
 ui <- fluidPage(
@@ -13,7 +13,7 @@ ui <- fluidPage(
 
   sidebarLayout(
     sidebarPanel(
-      div(HTML("<b>Choose Directory Containing PED file:</b>"), style = "margin-bottom: 5px;"),
+      div(HTML("<b>Choose directory to save to:</b>"), style = "margin-bottom: 5px;"),
         shinyDirButton('pedLocation', 'Browse...', title = 'Select a directory to save file in'),
         br(),
         htmlOutput('pedDirectory', inline = TRUE),  
@@ -62,7 +62,7 @@ server <- function(input, output, session) {
     }
   })
 
-  output$image <- renderImage({
+  pedigreeInput <- reactive({
     relation_file <- input$file1
     if (is.null(relation_file)) return(NULL)
     file_name <- as.character(relation_file['name'])
@@ -70,15 +70,18 @@ server <- function(input, output, session) {
     out_jpg_path <- producePED(file_path)
     pedigree <- normalizePath(file.path(out_jpg_path))
     list(src = pedigree)
+   })
+
+  output$image <- renderImage({
+    pedigreeInput()
   })
 
   output$pedigreeDownload <- downloadHandler(
       filename = input$pedigreeText,
       content = function(file) {
-        ggsave(input$pedigreeText, plot = input$image, device = "png")
+        ggsave(input$pedigreeText, plot = pedigreeInput(), device = "png")
       }
     )
-
 }
 
 
