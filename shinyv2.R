@@ -72,6 +72,13 @@ server <- function(input, output, session) {
     list(src = pedigree)
   })
 
+  output$pedigreeDownload <- downloadHandler(
+      filename = input$pedigreeText,
+      content = function(file) {
+        ggsave(input$pedigreeText, plot = input$image, device = "png")
+      }
+    )
+
 }
 
 
