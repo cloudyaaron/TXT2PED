@@ -21,7 +21,7 @@ ui <- fillPage(
       actionButton(inputId = 'newbutton',label = 'New FILE', width = '200px'),
       hr(),
       fileInput("file1", "Choose input text File", accept = c(".txt")),
-      textAreaInput('inputbox','command',height = '500px'),
+      textAreaInput('inputbox','command',height = '7cm'),
       sliderInput('distance','Distance between nodes',min = 0.01,max = 2,value = 0.7),
       actionButton(inputId = 'generatebutton',label = 'generate graph', icon = icon("refresh")),
       
