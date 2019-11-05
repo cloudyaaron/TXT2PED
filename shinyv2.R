@@ -16,7 +16,7 @@ ui <- fluidPage(
       div(HTML("<b>Choose Directory Containing PED file:</b>"), style = "margin-bottom: 5px;"),
         shinyDirButton('pedLocation', 'Browse...', title = 'Select a directory to save file in'),
         br(),
-        htmlOutput('pedDirectory'),  
+        htmlOutput('pedDirectory', inline = TRUE),  
         tags$hr(),
         textInput("pedtext", label = "Name PED", value = ".ped"),
         tags$hr(),
