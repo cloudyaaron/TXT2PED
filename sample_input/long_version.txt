@@ -1,4 +1,4 @@
-nn decaeased_is true
+nn deceased_is true
 nn affected_is true
 yy father_of gugu
 nn mother_of gugu

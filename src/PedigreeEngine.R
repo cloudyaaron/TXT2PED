@@ -22,12 +22,13 @@ preview <- function(path){
   file_name = as.character(path)
   con <- file(file_name,"r")
   line <- readLines(con, n = 1)
-  
+  t <- ""
  
   while( length(line) != 0 ) {
-    t <- paste(t,line,collapse = '')
+    t <- paste(t,line,"\n")
+    
     line<-readLines(con,n=1)
-    print(t)
+    
   }
   close(con)
   return(t)
@@ -67,34 +68,55 @@ producePED <- function(inFile) {
   # ======================================================
   # attribute: gender_is
   # ======================================================    
-      #if attributes was gender
-      if(aline[2] == "gender_is"){
+
         
-        #gender 1 is male, 2 is female, 3 is unknown
-        if(aline[3] == "male"){
-          gender = 1
-        }else if(aline[3]=="female"){
-          gender = 2
-        }else{
-          gender = 3
-        }
-        temp <- df$node == aline[1]
-        
-        #if not found in previous record
-        if (is.element(TRUE,temp) == FALSE){
-          #print("not exist. ADDING NEW ROW")
-          newrow <- data.frame(ped=familyid,id = ID,father=NA,mother=NA,sex = gender,affected=NA,deceased=0,node=aline[1],name=NA,dob=NA,partner=NA,sg=NA)
-          ID <- ID + 1
-          df<-rbind(df,newrow)
-         
-          #otherwise edit the current record
-        } else{
-          #print("record exist")
-          index <- which(temp == TRUE)
+        # ======================================================
+        # attribute: gender_is
+        # ======================================================    
+        #if attributes was gender
+        if(aline[2] == "gender_is"){
           
-          #col 5 is gender
-          df[index,5] <- gender
-        }
+          #gender 1 is male, 2 is female, 3 is unknown
+          
+          if(aline[3] == "male"){
+            gender = 1
+          }else if(aline[3]=="female"){
+            gender = 2
+          }else{
+            gender = 3
+          }
+          if (grepl(",",aline[1]) == TRUE){
+            people <- unlist(strsplit(aline[1],','))
+            
+            for (pe in people){
+              peindex <- which(df$node == pe)
+              
+              df[peindex,'sex'] <- gender
+            }
+          } else {
+            
+            
+            temp <- df$node == aline[1]
+            
+            #if not found in previous record
+            if (is.element(TRUE,temp) == FALSE){
+              #print("not exist. ADDING NEW ROW")
+              newrow <- data.frame(ped=familyid,id = ID,father=NA,mother=NA,sex = gender,affected=NA,deceased=0,node=aline[1],name=NA,dob=NA,partner=NA,sg=NA)
+              ID <- ID + 1
+              df<-rbind(df,newrow)
+              
+              #otherwise edit the current record
+            } else{
+              #print("record exist")
+              index <- which(temp == TRUE)
+              
+              #col 5 is gender
+              df[index,5] <- gender
+            }
+            
+          }
+        
+     
         #suggest gender to other relate people (wife or husband)
         
   # ======================================================
@@ -126,6 +148,7 @@ producePED <- function(inFile) {
           #col 9 is name
           df[index,9] <- tname
         }
+      
         
   # ======================================================
   # attribute: deceased_is
@@ -163,9 +186,10 @@ producePED <- function(inFile) {
         }
         # check if this person exist
         if (input_node %in% df$node) {
+         
           # add new row for this person
           index <- which(df$node == input_node)
-          df$affected[index] <- a
+          df[index,'affected'] <- a
         } else {
           newrow <- data.frame(ped=familyid,id = ID,father=NA,mother=NA,sex = 3,affected= a,deceased=0,node=aline[1],name=NA,dob=NA,partner=NA,sg=NA)
           ID <- ID + 1
@@ -418,7 +442,7 @@ producePED <- function(inFile) {
     #show the dataframe after reading eachline
     
     
-    #print(df)
+    print(df)
     #Set to nextline
     line<-readLines(con,n=1)
     linenum <- linenum + 1
@@ -436,7 +460,7 @@ producePED <- function(inFile) {
     ped1basic <- pedAll["1"]
     jpeg(out_jpg)#,res = 100 , pointsize = 0.1)
     plot(ped1basic,cex = 0.9, id = df$node,col = ifelse(!(is.na(df$affected)) && (df$affected == 0) , 'red', 'black'))
-    pedigree.legend(ped1basic,location = 'bottomright', radius = 0.05)
+    pedigree.legend(ped1basic,location = 'topright', radius = 0.05)
     dev.off()
     
   },
@@ -445,11 +469,11 @@ producePED <- function(inFile) {
     print(msg)
     print(cond)
     pedAll <- pedigree(id = df$id, dadid = df$father, momid = df$mother, 
-                       sex = df$sex, famid = df$ped)
+                       sex = df$sex, famid = df$ped, affected = df$affected, status = df$deceased)
     ped1basic <- pedAll["1"]
     jpeg(out_jpg)#,res = 100 , pointsize = 0.1)
     plot(ped1basic,cex = 0.9, id = df$node,col = ifelse(!(is.na(df$affected)) && (df$affected == 0) , 'red', 'black'))
-    pedigree.legend(ped1basic,location = 'bottomright', radius = 0.05)
+    pedigree.legend(ped1basic,location = 'topright', radius = 0.05)
     dev.off()
   },
   warning  = function(cond){
@@ -457,11 +481,11 @@ producePED <- function(inFile) {
     print(msg)
     print(cond)
     pedAll <- pedigree(id = df$id, dadid = df$father, momid = df$mother, 
-                       sex = df$sex, famid = df$ped, status = df$deceased)
+                       sex = df$sex, famid = df$ped, affected = df$affected, status = df$deceased)
     ped1basic <- pedAll["1"]
     jpeg(out_jpg)#,res = 100 , pointsize = 0.1)
     plot(ped1basic,cex = 0.9, id = df$node,col = ifelse(!(is.na(df$affected)) && (df$affected == 0) , 'red', 'black'))
-    pedigree.legend(ped1basic,location = 'bottomright', radius = 0.05)
+    pedigree.legend(ped1basic,location = 'topright', radius = 0.05)
     dev.off()
   },
   finallly = {

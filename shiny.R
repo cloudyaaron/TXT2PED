@@ -19,7 +19,7 @@ ui <- fillPage(
   sidebarLayout(
     sidebarPanel(
       actionButton(inputId = 'newbutton',label = 'New FILE', width = '200px'),
-      br(),
+      hr(),
       fileInput("file1", "Choose input text File", accept = c(".txt")),
       textAreaInput('inputbox','command',height = '500px'),
       sliderInput('distance','Distance between nodes',min = 0.01,max = 2,value = 0.7),
@@ -33,10 +33,10 @@ ui <- fillPage(
     mainPanel(
       fluidRow(
         column(3, offset = 1,
-               textInput("pedigreeText", label = "Name Graph", value = ".png")
+               textInput("pedigreeText", label = "Name .ped file", value = ".ped")
         ),
         column(3, offset = 2, style="padding-top:25px",
-               downloadButton('pedigreeDownload', 'Download Pedigree')
+               downloadButton('downloadbutton', 'Download Pedigree file')
         )
       ),
       hr(),
@@ -55,13 +55,17 @@ server <- function(input, output,session) {
   output$image <- renderImage({
     #print(getwd())
     relation_file <- input$file1
-    
-    print(relation_file)
+
     if (is.null( relation_file)){ 
       blank <- paste(getwd(),'/src/blank.png',sep = '')
       pedigree <- normalizePath(blank)
       list(src = pedigree)
     } else{
+      text <- preview(input$file1$datapath)
+      updateTextAreaInput(session,'inputbox',
+                          value = text                        
+      )
+      
       out_jpg_path <- producePED(relation_file$datapath)
       pedigree <- normalizePath(file.path(out_jpg_path))
       list(src = pedigree)
@@ -71,6 +75,7 @@ server <- function(input, output,session) {
   
   #update preview box
   observeEvent(input$generatebutton,{
+    
     text <- preview(input$file1$datapath)
     updateTextAreaInput(session,'inputbox',
       value = text                        
@@ -83,6 +88,15 @@ server <- function(input, output,session) {
     )
   })
   
+  
+  #download event
+#  output$downloadbutton <- downloadHandler(
+ #   filename = input$pedigreeText$value,
+  #  content = function(con){
+   #   
+    #}
+    
+  #)
 
 }
 

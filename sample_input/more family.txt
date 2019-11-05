@@ -1,0 +1,8 @@
+A father_of C,D,F
+B partner_of A
+E father_of G,I,J
+H partner_of E
+F father_of Z,V
+G mother_of Z,V
+C,D,I gender_is male
+J,Z,V gender_is female
