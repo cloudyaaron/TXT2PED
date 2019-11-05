@@ -5,7 +5,7 @@ library(dplyr)
 library(ggplot2)
 library(shinydashboard)
 library(leaflet)
-#source("./src/PedigreeEngine.R")
+source("./src/PedigreeEngine.R")
 
 # Define UI ----
 ui <- fluidPage(
