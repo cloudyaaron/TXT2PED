@@ -35,18 +35,37 @@ preview <- function(path){
 }
 
 
+getlog <- function(){
+  
+  con <- file("./output/log.txt","r")
+  line <- readLines(con, n = 1)
+  t <- ""
+  
+  while( length(line) != 0 ) {
+    t <- paste(t,line,"\n")
+    
+    line<-readLines(con,n=1)
+    
+  }
+  close(con)
+  return(t)
+}
+
 
 producePED <- function(inFile) {
+  
   #print(inFile)
   file_name = as.character(inFile)
   #print(file_name)
   con <- file(file_name,"r")
+  logcon <- file("./output/log.txt")
+  
   #read line one by one by the provindg file
   line <- readLines(con, n = 1)
   linenum <- 1
   ID <- 1
   familyid <- 1
-  
+  logtext <- ""
   #init dataframe
   df <- data.frame(matrix(ncol = 12, nrow = 0))
   column_names <- c("ped", "id", "father", "mother", "sex", "affected", "deceased", "node", "name", "dob", "partner", "sg")
@@ -63,6 +82,8 @@ producePED <- function(inFile) {
     if (grepl("_is",line) == TRUE ){
       
       print(paste("line: ",linenum, " attributes:",line))
+      logtext <- paste(logtext,"\n", "line: ",linenum, " attributes:",line) 
+      
       aline <- unlist(strsplit(line," "))
       
   # ======================================================
@@ -101,7 +122,7 @@ producePED <- function(inFile) {
             #if not found in previous record
             if (is.element(TRUE,temp) == FALSE){
               #print("not exist. ADDING NEW ROW")
-              newrow <- data.frame(ped=familyid,id = ID,father=NA,mother=NA,sex = gender,affected=NA,deceased=0,node=aline[1],name=NA,dob=NA,partner=NA,sg=NA)
+              newrow <- data.frame(ped=familyid,id = ID,father=NA,mother=NA,sex = gender,affected=0,deceased=0,node=aline[1],name=NA,dob=NA,partner=NA,sg=NA)
               ID <- ID + 1
               df<-rbind(df,newrow)
               
@@ -136,7 +157,7 @@ producePED <- function(inFile) {
         # if no record has been found
         if (is.element(TRUE,temp) == FALSE){
           #print("not exist. ADDING NEW ROW")
-          newrow <- data.frame(ped=familyid,id = ID,father=NA,mother=NA,sex = 3,affected=NA,deceased=0,node=aline[1],name=tname,dob=NA,partner=NA,sg=NA)
+          newrow <- data.frame(ped=familyid,id = ID,father=NA,mother=NA,sex = 3,affected=0,deceased=0,node=aline[1],name=tname,dob=NA,partner=NA,sg=NA)
           ID <- ID + 1
           df<-rbind(df,newrow)
           
@@ -168,7 +189,7 @@ producePED <- function(inFile) {
           index <- which(df$node == input_node)
           df$deceased[index] = dead
         } else {
-          newrow <- data.frame(ped=familyid,id = ID,father=NA,mother=NA,sex = 3,affected=NA,deceased=dead,node=aline[1],name=NA,dob=NA,partner=NA,sg=NA)
+          newrow <- data.frame(ped=familyid,id = ID,father=NA,mother=NA,sex = 3,affected=0,deceased=dead,node=aline[1],name=NA,dob=NA,partner=NA,sg=NA)
           ID <- ID + 1
           df<-rbind(df,newrow)
         }
@@ -210,12 +231,13 @@ producePED <- function(inFile) {
           index <- which(df$node == input_node)
           df$dob[index] = DOB
         } else {
-          newrow <- data.frame(ped=familyid,id = ID,father=NA,mother=NA,sex = 3,affected=NA,deceased=0,node=aline[1],name=NA,dob=DOB,partner=NA,sg=NA)
+          newrow <- data.frame(ped=familyid,id = ID,father=NA,mother=NA,sex = 3,affected=0,deceased=0,node=aline[1],name=NA,dob=DOB,partner=NA,sg=NA)
           ID <- ID + 1
           df<-rbind(df,newrow)
         }
       }else {
         showerror <- paste("line ",linenum, " has unexpected attributes")
+        logtext <- paste(logtext,"\n", "line ",linenum, " has unexpected attributes") 
         print(showerror)
         break
       }
@@ -231,6 +253,7 @@ producePED <- function(inFile) {
     } else if(grepl("_of",line) == TRUE ){
       
       print(paste("line: ",linenum,"relation: ",line))
+      logtext <- paste(logtext,"\n", "line: ",linenum,"relation: ",line)
       
       #relationship always happened within 2 people, rline[1] & rline[3] store this two node 
       rline <- unlist(strsplit(line," "))
@@ -254,10 +277,10 @@ producePED <- function(inFile) {
         
         #check first person exist?
         if (is.element(TRUE,temp) == FALSE){
-          print("First person record not exists")
+          #print("First person record not exists")
           
           #since coln is the column that parent store, coln-2 is gender
-          newrow <- data.frame(ped=familyid,id = ID,father=NA,mother=NA,sex = coln-2,affected=NA,deceased=0,node=rline[1],name=NA,dob=NA,partner=NA,sg=NA)
+          newrow <- data.frame(ped=familyid,id = ID,father=NA,mother=NA,sex = coln-2,affected=0,deceased=0,node=rline[1],name=NA,dob=NA,partner=NA,sg=NA)
           ID <- ID + 1
           df<-rbind(df,newrow)
         }
@@ -265,10 +288,10 @@ producePED <- function(inFile) {
         #if there is more than one children
         if (grepl(',', rline[3]) == TRUE){
           children <<- unlist(strsplit(rline[3],','))
-          print('many childrens')
+          #print('many childrens')
           for (child in children){
             if (!(child %in% df$node)){
-              newrow <- data.frame(ped=familyid,id = ID,father=NA,mother=NA,sex = 3,affected=NA,deceased=0,node = child,name=NA,dob=NA,partner=NA,sg=NA)
+              newrow <- data.frame(ped=familyid,id = ID,father=NA,mother=NA,sex = 3,affected=0,deceased=0,node = child,name=NA,dob=NA,partner=NA,sg=NA)
               ID <- ID + 1
               df<-rbind(df,newrow)
             }
@@ -277,13 +300,13 @@ producePED <- function(inFile) {
           children <- c(rline[3])
         #check if second person has exist
           if(is.element(TRUE,temp2) == FALSE){
-            print("second person record not exists")
-            newrow <- data.frame(ped=familyid,id = ID,father=NA,mother=NA,sex = 3,affected=NA,deceased=0,node=rline[3],name=NA,dob=NA,partner=NA,sg=NA)
+            #print("second person record not exists")
+            newrow <- data.frame(ped=familyid,id = ID,father=NA,mother=NA,sex = 3,affected=0,deceased=0,node=rline[3],name=NA,dob=NA,partner=NA,sg=NA)
             ID <- ID + 1
             df<-rbind(df,newrow)
             }
         }
-        print(children)
+        #print(children)
         
         # change parent into appropriet gender
         parentindex <- which(df$node == rline[1])
@@ -305,10 +328,10 @@ producePED <- function(inFile) {
         
         #check first person exist?
         if (is.element(TRUE,temp) == FALSE){
-          print("First person record not exists")
+          #print("First person record not exists")
           
           #since coln is the column that parent store, coln-2 is gender
-          newrow <- data.frame(ped=familyid,id = ID,father=NA,mother=NA,sex = 3,affected=NA,deceased=0,node=rline[1],name=NA,dob=NA,partner=NA,sg=NA)
+          newrow <- data.frame(ped=familyid,id = ID,father=NA,mother=NA,sex = 3,affected=0,deceased=0,node=rline[1],name=NA,dob=NA,partner=NA,sg=NA)
           ID <- ID + 1
           df<-rbind(df,newrow)
           
@@ -316,8 +339,8 @@ producePED <- function(inFile) {
         
         #check if second person has exist
         if (is.element(TRUE,temp2) == FALSE){
-          print("second person record not exists")
-          newrow <- data.frame(ped=familyid,id = ID,father=NA,mother=NA,sex = 3,affected=NA,deceased=0,node=rline[3],name=NA,dob=NA,partner=NA,sg=NA)
+          #print("second person record not exists")
+          newrow <- data.frame(ped=familyid,id = ID,father=NA,mother=NA,sex = 3,affected=0,deceased=0,node=rline[3],name=NA,dob=NA,partner=NA,sg=NA)
           ID <- ID + 1
           df<-rbind(df,newrow)
         }
@@ -404,22 +427,22 @@ producePED <- function(inFile) {
           } else {                        # sister: female
             s = 2
           }
-          newrow <- data.frame(ped=familyid,id=ID,father=f,mother=m,sex = 3,affected=NA,deceased=0,node=node2,name=NA,dob=NA,partner=NA,sg=c(node1))
+          newrow <- data.frame(ped=familyid,id=ID,father=f,mother=m,sex = 3,affected=0,deceased=0,node=node2,name=NA,dob=NA,partner=NA,sg=c(node1))
           ID <- ID + 1
           df<-rbind(df,newrow)
         # if node2 not in dataframe
         } else if (!(node2 %in% df$node)) {
           f = df$father[index1]
           m = df$mother[index1]
-          newrow <- data.frame(ped=familyid,id=ID,father=f,mother=m,sex = 3,affected=NA,deceased=0,node=node1,name=NA,dob=NA,partner=NA,sg=c(node2))
+          newrow <- data.frame(ped=familyid,id=ID,father=f,mother=m,sex = 3,affected=0,deceased=0,node=node1,name=NA,dob=NA,partner=NA,sg=c(node2))
           ID <- ID + 1
           df<-rbind(df,newrow)
         # if both not in dataframe
         } else {
-          newrow <- data.frame(ped=familyid,id=ID,father=NA,mother=NA,sex = 3,affected=NA,deceased=0,node=node1,name=NA,dob=NA,partner=NA,sg=c(node2))
+          newrow <- data.frame(ped=familyid,id=ID,father=NA,mother=NA,sex = 3,affected=0,deceased=0,node=node1,name=NA,dob=NA,partner=NA,sg=c(node2))
           ID <- ID + 1
           df<-rbind(df,newrow)
-          newrow <- data.frame(ped=familyid,id=ID,father=NA,mother=NA,sex = 3,affected=NA,deceased=0,node=node2,name=NA,dob=NA,partner=NA,sg=c(node1))
+          newrow <- data.frame(ped=familyid,id=ID,father=NA,mother=NA,sex = 3,affected=0,deceased=0,node=node2,name=NA,dob=NA,partner=NA,sg=c(node1))
           ID <- ID + 1
           df<-rbind(df,newrow)
         }
@@ -434,6 +457,7 @@ producePED <- function(inFile) {
     #alertuser error when line can not be understand
     } else{
       showerror <- paste("line ",linenum, " has syntax error")
+      logtext <- paste(logtext,"\n", showerror) 
       print(showerror)
       break
     }
@@ -443,57 +467,69 @@ producePED <- function(inFile) {
     
     
     print(df)
+    
     #Set to nextline
     line<-readLines(con,n=1)
     linenum <- linenum + 1
   }
-  print_ped(df)
   
+  writeLines(logtext,logcon)
+  print_ped(df)
+  close(con)
+  close(logcon)
+  write.table(df[,1:10],'./output/log.txt', append = TRUE, sep = "\t")
+  return(df)
+}
+
+producegraph <- function(df,d,position) {
   # ======================================================
   # graph
   # ======================================================
   out_jpg = './output/output.jpg'
-  
+
+  d <- 2.1 - d
   out <- tryCatch({
     pedAll <- pedigree(id = df$id, dadid = df$father, momid = df$mother, 
                        sex = df$sex, famid = df$ped, affected = df$affected, status = df$deceased)
     ped1basic <- pedAll["1"]
     jpeg(out_jpg)#,res = 100 , pointsize = 0.1)
-    plot(ped1basic,cex = 0.9, id = df$node,col = ifelse(!(is.na(df$affected)) && (df$affected == 0) , 'red', 'black'))
-    pedigree.legend(ped1basic,location = 'topright', radius = 0.05)
+    plot(ped1basic,cex = d, id = df$node,col = ifelse(!(is.na(df$affected)) && (df$affected == 0) , 'red', 'black'))
+    pedigree.legend(ped1basic,location = position, radius = d/5)
     dev.off()
     
   },
   error = function(cond){
-    msg <-  "fatal error occur, plz remember what has been input and contact the dev group"
-    print(msg)
     print(cond)
+   
+    write.table(c(cond[1]),'./output/log.txt', append = TRUE)
     pedAll <- pedigree(id = df$id, dadid = df$father, momid = df$mother, 
                        sex = df$sex, famid = df$ped, affected = df$affected, status = df$deceased)
     ped1basic <- pedAll["1"]
     jpeg(out_jpg)#,res = 100 , pointsize = 0.1)
-    plot(ped1basic,cex = 0.9, id = df$node,col = ifelse(!(is.na(df$affected)) && (df$affected == 0) , 'red', 'black'))
-    pedigree.legend(ped1basic,location = 'topright', radius = 0.05)
+    plot(ped1basic,cex = d, id = df$node,col = ifelse(!(is.na(df$affected)) && (df$affected == 0) , 'red', 'black'))
+    pedigree.legend(ped1basic,location = position, radius = d/5)
     dev.off()
   },
   warning  = function(cond){
     msg <- 'warnning occur'
     print(msg)
-    print(cond)
+    
+
+    write.table(c(cond[1]),'./output/log.txt', append = TRUE)
     pedAll <- pedigree(id = df$id, dadid = df$father, momid = df$mother, 
                        sex = df$sex, famid = df$ped, affected = df$affected, status = df$deceased)
     ped1basic <- pedAll["1"]
     jpeg(out_jpg)#,res = 100 , pointsize = 0.1)
-    plot(ped1basic,cex = 0.9, id = df$node,col = ifelse(!(is.na(df$affected)) && (df$affected == 0) , 'red', 'black'))
-    pedigree.legend(ped1basic,location = 'topright', radius = 0.05)
+    plot(ped1basic,cex = d, id = df$node,col = ifelse(!(is.na(df$affected)) && (df$affected == 0) , 'red', 'black'))
+    pedigree.legend(ped1basic,location = position, radius = d/5)
     dev.off()
   },
   finallly = {
-    write.csv(df[,1:10],'./output/log.txt')
+    # write.csv(df[,1:10],'./output/log.txt')
     dev.off}
   )
   
-  close(con)
+  
   
   return(out_jpg)
 }
