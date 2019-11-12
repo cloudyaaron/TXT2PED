@@ -91,6 +91,10 @@ server <- function(input, output,session) {
   #update preview box
   observeEvent(input$generatebutton,{
     print(input$file1)
+    
+    con <- file(input$file1$datapath)
+    writeLines(input$inputbox,con)
+    close(con)
     text <- preview(input$file1$datapath)
     logtext <- getlog()
     updateTextAreaInput(session,'inputbox',
@@ -99,7 +103,40 @@ server <- function(input, output,session) {
     updateTextAreaInput(session,'console',
                         value = logtext                        
     )
+    output$image <- renderImage({
+      
+      #print(getwd())
+      relation_file <- input$file1
+      shinyjs::disable("console")
+      
+      if (is.null( relation_file)){ 
+        blank <- paste(getwd(),'/src/blank.png',sep = '')
+        pedigree <- normalizePath(blank)
+        list(src = pedigree)
+      } else{
+        text <- preview(input$file1$datapath)
+        
+        
+        ped <- producePED(relation_file$datapath)
+        
+        out_jpg_path <- producegraph(ped,input$distance,input$legendPosition)
+        pedigree <- normalizePath(file.path(out_jpg_path))
+        logtext <- getlog()
+        updateTextAreaInput(session,'inputbox',
+                            value = text                        
+        )
+        updateTextAreaInput(session,'console',
+                            value = logtext                        
+        )
+        list(src = pedigree)
+        
+      }
+      
+    }, deleteFile = FALSE)
   })
+  
+  
+  
   
   observeEvent(input$newbutton,{
     updateTextAreaInput(session,'inputbox',
@@ -108,14 +145,18 @@ server <- function(input, output,session) {
   })
   
   output$savebutton <- downloadHandler(
-    filename = input$file1$name,
+    filename = function(){
+      paste(input$file1$name)
+    },
     
     content = function(con){
       tt <- input$inputbox
       print(tt)
       writeLines(tt, con)
       
-    }
+    },
+    
+    contentType = "text/csv"
     
   )
   

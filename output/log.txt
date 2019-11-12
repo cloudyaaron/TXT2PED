@@ -1,23 +1,106 @@
  
- line:  1 relation:  A father_of B 
- line:  2 relation:  C mother_of B 
- line:  3 relation:  A father_of D 
- line:  4 relation:  C mother_of D 
- line:  5 relation:  A father_of E 
- line:  6 relation:  C mother_of E 
- line:  7 relation:  A father_of E 
- line:  8 relation:  C mother_of E 
- line:  9 relation:  A father_of F 
- line:  10 relation:  C mother_of F 
- line:  11 relation:  D father_of H 
- line:  12 relation:  E mother_of H
+ line:  1  attributes: nn deceased_is true 
+ line:  2  attributes: nn affected_is true 
+ line:  3 relation:  yy father_of gugu 
+ line:  4 relation:  nn mother_of gugu 
+ line:  5 relation:  yy father_of dashu 
+ line:  6 relation:  nn mother_of dashu 
+ line:  7 relation:  yy father_of ershu 
+ line:  8 relation:  nn mother_of ershu 
+ line:  9 relation:  yy father_of sanshu 
+ line:  10 relation:  nn mother_of sanshu 
+ line:  11 relation:  yy father_of papa 
+ line:  12 relation:  nn mother_of papa 
+ line:  13 relation:  gugu mother_of j1 
+ line:  14 relation:  gugu mother_of g1 
+ line:  15 relation:  gufu father_of j1 
+ line:  16 relation:  gufu father_of g1 
+ line:  17  attributes: j1 gender_is female 
+ line:  18  attributes: g1 gender_is male 
+ line:  19 relation:  dashu father_of g2 
+ line:  20 relation:  dashu father_of g3 
+ line:  21 relation:  dashen mother_of g2 
+ line:  22 relation:  dashen mother_of g3 
+ line:  23  attributes: g2 gender_is male 
+ line:  24  attributes: g3 gender_is male 
+ line:  25 relation:  ershu father_of g4 
+ line:  26 relation:  ershen mother_of g4 
+ line:  27  attributes: g4 gender_is male 
+ line:  28 relation:  sanshu father_of g5 
+ line:  29 relation:  sanshu father_of j2 
+ line:  30 relation:  sanshu father_of j3 
+ line:  31 relation:  sanshen mother_of g5 
+ line:  32 relation:  sanshen mother_of j2 
+ line:  33 relation:  sanshen mother_of j3 
+ line:  34  attributes: g5 gender_is male 
+ line:  35  attributes: j2 gender_is female 
+ line:  36  attributes: j3 gender_is female 
+ line:  37 relation:  papa father_of joy 
+ line:  38 relation:  mama mother_of joy 
+ line:  39  attributes: joy gender_is female 
+ line:  40 relation:  g1 father_of zn1 
+ line:  41 relation:  s1 mother_of zn1 
+ line:  42  attributes: zn1 gender_is female 
+ line:  43 relation:  j1 mother_of zn2 
+ line:  44 relation:  j1 mother_of zn3 
+ line:  45 relation:  jf1 father_of zn2 
+ line:  46 relation:  jf1 father_of zn3 
+ line:  47  attributes: zn2 gender_is female 
+ line:  48  attributes: zn3 gender_is female 
+ line:  49 relation:  g1 father_of zn4 
+ line:  50 relation:  s1 mother_of zn4 
+ line:  51  attributes: zn4 gender_is female 
+ line:  52 relation:  g2 father_of zn5 
+ line:  53 relation:  s2 mother_of zn5 
+ line:  54  attributes: zn5 gender_is female 
+ line:  55 relation:  g3 father_of z1 
+ line:  56 relation:  s3 mother_of z1 
+ line:  57  attributes: z1 gender_is male 
+ line:  58 relation:  j2 mother_of zn6 
+ line:  59 relation:  jf2 father_of zn6 
+ line:  60  attributes: zn6 gender_is female 
+ line:  61 relation:  j3 mother_of z3 
+ line:  62 relation:  jf3 father_of z3 
+ line:  63  attributes: z3 gender_is male 
+ line:  64 relation:  j3 mother_of z4 
+ line:  65 relation:  jf3 father_of z4 
+ line:  66  attributes: z4 gender_is male 
+ line:  67  attributes: joy DOB_is 2019/01/01 
+ line  68  has syntax error
 "ped"	"id"	"father"	"mother"	"sex"	"affected"	"deceased"	"node"	"name"	"dob"
-"1"	1	1	NA	NA	1	0	0	"A"	NA	NA
-"2"	1	2	1	3	3	0	0	"B"	NA	NA
-"3"	1	3	NA	NA	2	0	0	"C"	NA	NA
-"4"	1	4	1	3	1	0	0	"D"	NA	NA
-"5"	1	5	1	3	2	0	0	"E"	NA	NA
-"6"	1	6	1	3	3	0	0	"F"	NA	NA
-"7"	1	7	4	5	3	0	0	"H"	NA	NA
-"message"
-"1" "More than 25% of the gender values are 'unknown'"
+"1"	1	1	NA	NA	2	1	1	"nn"	NA	NA
+"2"	1	2	NA	NA	1	0	0	"yy"	NA	NA
+"3"	1	3	2	1	2	0	0	"gugu"	NA	NA
+"4"	1	4	2	1	1	0	0	"dashu"	NA	NA
+"5"	1	5	2	1	1	0	0	"ershu"	NA	NA
+"6"	1	6	2	1	1	0	0	"sanshu"	NA	NA
+"7"	1	7	2	1	1	0	0	"papa"	NA	NA
+"8"	1	8	10	3	2	0	0	"j1"	NA	NA
+"9"	1	9	10	3	1	0	0	"g1"	NA	NA
+"10"	1	10	NA	NA	1	0	0	"gufu"	NA	NA
+"11"	1	11	4	13	1	0	0	"g2"	NA	NA
+"12"	1	12	4	13	1	0	0	"g3"	NA	NA
+"13"	1	13	NA	NA	2	0	0	"dashen"	NA	NA
+"14"	1	14	5	15	1	0	0	"g4"	NA	NA
+"15"	1	15	NA	NA	2	0	0	"ershen"	NA	NA
+"16"	1	16	6	19	1	0	0	"g5"	NA	NA
+"17"	1	17	6	19	2	0	0	"j2"	NA	NA
+"18"	1	18	6	19	2	0	0	"j3"	NA	NA
+"19"	1	19	NA	NA	2	0	0	"sanshen"	NA	NA
+"20"	1	20	7	21	2	0	0	"joy"	NA	"2019/01/01"
+"21"	1	21	NA	NA	2	0	0	"mama"	NA	NA
+"22"	1	22	9	23	2	0	0	"zn1"	NA	NA
+"23"	1	23	NA	NA	2	0	0	"s1"	NA	NA
+"24"	1	24	26	8	2	0	0	"zn2"	NA	NA
+"25"	1	25	26	8	2	0	0	"zn3"	NA	NA
+"26"	1	26	NA	NA	1	0	0	"jf1"	NA	NA
+"27"	1	27	9	23	2	0	0	"zn4"	NA	NA
+"28"	1	28	11	29	2	0	0	"zn5"	NA	NA
+"29"	1	29	NA	NA	2	0	0	"s2"	NA	NA
+"30"	1	30	12	31	1	0	0	"z1"	NA	NA
+"31"	1	31	NA	NA	2	0	0	"s3"	NA	NA
+"32"	1	32	33	17	2	0	0	"zn6"	NA	NA
+"33"	1	33	NA	NA	1	0	0	"jf2"	NA	NA
+"34"	1	34	35	18	1	0	0	"z3"	NA	NA
+"35"	1	35	NA	NA	1	0	0	"jf3"	NA	NA
+"36"	1	36	35	18	1	0	0	"z4"	NA	NA

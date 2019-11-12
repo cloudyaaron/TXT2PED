@@ -25,7 +25,7 @@ preview <- function(path){
   t <- ""
  
   while( length(line) != 0 ) {
-    t <- paste(t,line,"\n")
+    t <- paste(t,line,"\n",sep = "")
     
     line<-readLines(con,n=1)
     
@@ -42,7 +42,7 @@ getlog <- function(){
   t <- ""
   
   while( length(line) != 0 ) {
-    t <- paste(t,line,"\n")
+    t <- paste(t,line,"\n",sep = "")
     
     line<-readLines(con,n=1)
     
@@ -492,8 +492,10 @@ producegraph <- function(df,d,position) {
     pedAll <- pedigree(id = df$id, dadid = df$father, momid = df$mother, 
                        sex = df$sex, famid = df$ped, affected = df$affected, status = df$deceased)
     ped1basic <- pedAll["1"]
+    
+    idc <- paste(df$id,df$node,df$dob,sep = "\n")
     jpeg(out_jpg)#,res = 100 , pointsize = 0.1)
-    plot(ped1basic,cex = d, id = df$node,col = ifelse(!(is.na(df$affected)) && (df$affected == 0) , 'red', 'black'))
+    plot(ped1basic,cex = d, id = idc)# ,col = ifelse(df$affected == 0 , 1, 2))
     pedigree.legend(ped1basic,location = position, radius = d/5)
     dev.off()
     
@@ -506,7 +508,7 @@ producegraph <- function(df,d,position) {
                        sex = df$sex, famid = df$ped, affected = df$affected, status = df$deceased)
     ped1basic <- pedAll["1"]
     jpeg(out_jpg)#,res = 100 , pointsize = 0.1)
-    plot(ped1basic,cex = d, id = df$node,col = ifelse(!(is.na(df$affected)) && (df$affected == 0) , 'red', 'black'))
+    plot(ped1basic,cex = d, id = df$node)# ,col = ifelse(df$affected == 0 , 1, 2))
     pedigree.legend(ped1basic,location = position, radius = d/5)
     dev.off()
   },
@@ -520,7 +522,7 @@ producegraph <- function(df,d,position) {
                        sex = df$sex, famid = df$ped, affected = df$affected, status = df$deceased)
     ped1basic <- pedAll["1"]
     jpeg(out_jpg)#,res = 100 , pointsize = 0.1)
-    plot(ped1basic,cex = d, id = df$node,col = ifelse(!(is.na(df$affected)) && (df$affected == 0) , 'red', 'black'))
+    plot(ped1basic,cex = d, id = df$node)# ,col = ifelse(df$affected == 0 , 1, 2))
     pedigree.legend(ped1basic,location = position, radius = d/5)
     dev.off()
   },
