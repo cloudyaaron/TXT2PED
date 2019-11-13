@@ -10,13 +10,18 @@ if(!require(shinythemes)) install.packages("shinythemes")
 
 
 # Define UI ----
-ui <- fluidPage(
+ui <- fillPage(
   shinyjs::useShinyjs(),
   padding = 5,
   theme = shinytheme("journal"),
   shinythemes::themeSelector(),
   titlePanel("Pedigree Engine"),
-
+  tags$head(tags$script(HTML("
+        // Enable navigation prompt
+        window.onbeforeunload = function() {
+            return 'Your changes will be lost!';
+        };
+    "))),
   sidebarLayout(
     sidebarPanel(
       actionButton(inputId = 'newbutton',label = 'New FILE', width = '200px'),
@@ -24,8 +29,6 @@ ui <- fluidPage(
       hr(),
       fileInput("file1", "Choose input text File", accept = c(".txt")),
       textAreaInput('inputbox','command',height = '7cm'),
-      selectizeInput(inputId = "legendPosition",'Legend position', choices = c("Top right" = "topright",  "Top left" = "topleft", "Bottom right" = "bottomright", "Bottom left" = "bottomleft")),
-      sliderInput('distance','Distance between nodes',min = 0.01,max = 2,value = 0.7),
       textAreaInput('console','console',height = '5cm'),
       actionButton(inputId = 'generatebutton',label = 'generate graph', icon = icon("refresh")),
       
@@ -36,19 +39,32 @@ ui <- fluidPage(
     ),
     mainPanel(
       fluidRow(
-        column(3, offset = 1,
-               textInput("pedigreeText", label = "Name .ped file", value = ".ped")
+        column(3,
+          selectizeInput(inputId = "legendPosition",'Legend position', choices = c("Top right" = "topright",  "Top left" = "topleft", "Bottom right" = "bottomright", "Bottom left" = "bottomleft")),
+          sliderInput('distance','Distance between nodes',min = 0.01,max = 2,value = 0.7)
         ),
-        column(3, offset = 2, style="padding-top:25px",
-               downloadButton('downloadbutton', 'Download Pedigree file')
+
+        column(3, style="padding-top:25px",
+               downloadButton('exportbutton', 'Export Pedigree file'),
+               hr(),
+               checkboxGroupInput("variable", "Variables to show:",
+                                  c("ID" = "id",
+                                    "Real name" = "name",
+                                    "Date of birth" = "dob",
+                                    "Affected" = "affect",
+                                    "Addtional Text" = "ad"), inline = TRUE)
         )
       ),
       hr(),
       imageOutput("image"),
       
-      width = 4
-    )
+      width = 6
+    ),
+    
+    fluid = TRUE
   )
+  
+  
 )
 
 # Define server logic ----
@@ -72,8 +88,8 @@ server <- function(input, output,session) {
       
 
       ped <- producePED(relation_file$datapath)
-      
-      out_jpg_path <- producegraph(ped,input$distance,input$legendPosition)
+      #print(ped)
+      out_jpg_path <- producegraph(ped,input$distance,input$legendPosition,input$variable)
       pedigree <- normalizePath(file.path(out_jpg_path))
       logtext <- getlog()
       updateTextAreaInput(session,'inputbox',
@@ -82,7 +98,7 @@ server <- function(input, output,session) {
       updateTextAreaInput(session,'console',
                           value = logtext                        
       )
-      list(src = pedigree)
+      list(src = pedigree, contentType = "image/png")
       
       }
 
@@ -119,7 +135,9 @@ server <- function(input, output,session) {
         
         ped <- producePED(relation_file$datapath)
         
-        out_jpg_path <- producegraph(ped,input$distance,input$legendPosition)
+        
+        
+        out_jpg_path <- producegraph(ped,input$distance,input$legendPosition,input$variable)
         pedigree <- normalizePath(file.path(out_jpg_path))
         logtext <- getlog()
         updateTextAreaInput(session,'inputbox',
@@ -128,7 +146,7 @@ server <- function(input, output,session) {
         updateTextAreaInput(session,'console',
                             value = logtext                        
         )
-        list(src = pedigree)
+        list(src = pedigree, contentType = "image/png" )
         
       }
       
@@ -151,7 +169,7 @@ server <- function(input, output,session) {
     
     content = function(con){
       tt <- input$inputbox
-      print(tt)
+      #print(tt)
       writeLines(tt, con)
       
     },
