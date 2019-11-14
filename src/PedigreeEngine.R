@@ -182,17 +182,26 @@ producePED <- function(inFile) {
         } else {
           dead = 0
         }
-        
-        # check if this person exist
-        if (input_node %in% df$node) {
-          # add new row for this person
-          index <- which(df$node == input_node)
-          df$deceased[index] = dead
+        if (grepl(",",aline[1]) == TRUE){
+          people <- unlist(strsplit(aline[1],','))
+          
+          for (pe in people){
+            peindex <- which(df$node == pe)
+            df[peindex,'deceased'] <- dead
+          }
         } else {
-          newrow <- data.frame(ped=familyid,id = ID,father=NA,mother=NA,sex = 3,affected=0,deceased=dead,node=aline[1],name=NA,dob=NA,partner=NA,sg=NA,ad=NA)
-          ID <- ID + 1
-          df<-rbind(df,newrow)
+          if (input_node %in% df$node) {
+            # add new row for this person
+            index <- which(df$node == input_node)
+            df$deceased[index] = dead
+          } else {
+            newrow <- data.frame(ped=familyid,id = ID,father=NA,mother=NA,sex = 3,affected=0,deceased=dead,node=aline[1],name=NA,dob=NA,partner=NA,sg=NA,ad=NA)
+            ID <- ID + 1
+            df<-rbind(df,newrow)
+          }
         }
+        # check if this person exist
+
   
   # ======================================================
   # attribute: affected_is
@@ -235,7 +244,35 @@ producePED <- function(inFile) {
           ID <- ID + 1
           df<-rbind(df,newrow)
         }
-      }else {
+  # ======================================================
+  # attribute: ad_is
+  # ======================================================            
+        # need more spacve
+      }else if (aline[2] == "ad_is"){
+        ad<-""
+        if (length(aline)>3){
+          i <- 3
+          while(i <= length(aline) ){
+            ad <- paste(ad,aline[i])
+            i = i+1
+          }
+        } else{
+          ad <- aline[3]
+          
+        }
+        noden <- aline[1]
+        if (noden %in% df$node){
+          index <- which(df$node == noden)
+          df$ad[index] = ad
+        }else{
+          logtext <- paste(logtext,"\n", noden,"doesn't exist") 
+        }
+        
+      
+      
+      
+      
+      } else {
         showerror <- paste("line ",linenum, " has unexpected attributes")
         logtext <- paste(logtext,"\n", "line ",linenum, " has unexpected attributes") 
         print(showerror)
@@ -243,7 +280,7 @@ producePED <- function(inFile) {
       }
       
       #suggest the info with current info
-
+    
   
       
   # ======================================================
@@ -487,7 +524,7 @@ producegraph <- function(df,d,position, arg) {
   # ======================================================
   out_jpg = './output/output.jpg'
   idc <- df$node
-  print(arg)
+  #print(arg)
   if (length(arg)>0){
     if ("name" %in% arg){
       idc <- paste(idc,df$name,sep = "\n")
@@ -510,11 +547,12 @@ producegraph <- function(df,d,position, arg) {
       
     }
   }
-    print(idc)
+   # print(idc)
   d <- 2.1 - d
+  aff <- data.frame(yo = df$affected, bald = c(0,0,0,0,1,1,1))
   out <- tryCatch({
     pedAll <- pedigree(id = df$id, dadid = df$father, momid = df$mother, 
-                       sex = df$sex, famid = df$ped, affected = df$affected, status = df$deceased)
+                       sex = df$sex, famid = df$ped, affected = as.matrix(aff), status = df$deceased)
     ped1basic <- pedAll["1"]
     
     

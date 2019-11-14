@@ -178,6 +178,17 @@ server <- function(input, output,session) {
     
   )
   
+  output$exportbutton <- downloadHandler(
+    filename = function(){
+      paste(gsub('.{0,3}$', '', input$file1$name),"ped",sep = "")
+    },
+    content = function(con){
+      ped <- producePED(input$file1$datapath)
+      write.csv(ped[,1:7],con)
+      
+    },
+    contentType = ".ped"
+  )
   
   #download event
 #  output$downloadbutton <- downloadHandler(
