@@ -202,24 +202,49 @@ producePED <- function(inFile) {
   # attribute: affected_is
   # ======================================================  
       } else if(aline[2] == "affected_is"){
-        input_node <- aline[1]
-        affected <- toupper(aline[3])
-        if (affected == "TRUE") {
-          a <- 1
-        } else {
-          a <- 0
+        input_nodes <- aline[1]
+        affected <- aline[3]
+        ds <- unlist(strsplit(affected,","))
+        print(ds)
+       
+        if (length(ds)>4 || length(names(df)) > 16){
+          logtext <- paste(logtext,"\n", "There are more than 4 dieases")
+        }else{
+          for (d in ds) {
+            ns <- unlist(strsplit(input_nodes,","))
+            if(d %in% names(df)){
+              print("d exists")
+              for(n in ns){
+                index <- which(df$node == n)
+                df[index,d] <- 1
+              }
+              
+            }else{
+              print(paste(d,"not exists"))
+              
+              df[,d] <- 0
+              
+              for(n in ns){
+                index <- which(df$node == n)
+                df[index,d] <- 1
+              }
+            }
+          }
+          print(df)
         }
+ 
+        
+        
         # check if this person exist
-        if (input_node %in% df$node) {
-         
-          # add new row for this person
-          index <- which(df$node == input_node)
-          df[index,'affected'] <- a
-        } else {
-          newrow <- data.frame(ped=familyid,id = ID,father=NA,mother=NA,sex = 3,affected= a,deceased=0,node=aline[1],name=NA,dob=NA,partner=NA,sg=NA,ad=NA)
-          ID <- ID + 1
-          df<-rbind(df,newrow)
-        }
+#        if (input_node %in% df$node) {
+ ##        # add new row for this person
+   #       index <- which(df$node == input_node)
+  #        df[index,'affected'] <- a
+   #     } else {
+    #      newrow <- data.frame(ped=familyid,id = ID,father=NA,mother=NA,sex = 3,affected= a,deceased=0,node=aline[1],name=NA,dob=NA,partner=NA,sg=NA,ad=NA)
+     #     ID <- ID + 1
+      #    df<-rbind(df,newrow)
+       # }
         
         
         
@@ -547,7 +572,7 @@ producePED <- function(inFile) {
   #print_ped(df)
   close(con)
   close(logcon)
-  write.table(df[,1:11],'./output/log.txt', append = TRUE, sep = "\t")
+  write.table(df,'./output/log.txt', append = TRUE, sep = "\t")
   return(df)
 }
 
@@ -582,7 +607,22 @@ producegraph <- function(df,d,position, arg) {
   }
    # print(idc)
   d <- 2.1 - d
-  aff <- data.frame(yo = df$affected, bald = c(0,0,0,0,1,1,1))
+  
+  diseasenumber <- length(names(df)) - 13
+  if (diseasenumber == 1){
+    aff <- df[,14]
+  } else if (diseasenumber == 2){
+    aff <- df[,14:15]
+  } else if(diseasenumber == 3){
+    aff <- df[,14:16]
+  }else if (diseasenumber == 4){
+    aff <- df[,14:17]
+  } else{
+    aff <- df$affected
+  }
+  print(diseasenumber)
+
+  
   out <- tryCatch({
     pedAll <- pedigree(id = df$id, dadid = df$father, momid = df$mother, 
                        sex = df$sex, famid = df$ped, affected = as.matrix(aff), status = df$deceased)
@@ -600,7 +640,7 @@ producegraph <- function(df,d,position, arg) {
    
     write.table(c(cond[1]),'./output/log.txt', append = TRUE)
     pedAll <- pedigree(id = df$id, dadid = df$father, momid = df$mother, 
-                       sex = df$sex, famid = df$ped, affected = df$affected, status = df$deceased)
+                       sex = df$sex, famid = df$ped, affected = as.matrix(aff), status = df$deceased)
     ped1basic <- pedAll["1"]
     write.table(c(cond[1],cond[2]),'./output/log.txt', append = TRUE)
     jpeg(out_jpg)#,res = 100 , pointsize = 0.1)
@@ -616,7 +656,7 @@ producegraph <- function(df,d,position, arg) {
     write.table(c(cond[1]),'./output/log.txt', append = TRUE)
     
     pedAll <- pedigree(id = df$id, dadid = df$father, momid = df$mother, 
-                       sex = df$sex, famid = df$ped, affected = df$affected, status = df$deceased)
+                       sex = df$sex, famid = df$ped, affected = as.matrix(aff), status = df$deceased)
     ped1basic <- pedAll["1"]
     jpeg(out_jpg)#,res = 100 , pointsize = 0.1)
     plot(ped1basic,cex = d, id = idc)# ,col = ifelse(df$affected == 0 , 1, 2))
