@@ -1,0 +1,22 @@
+gp father_of A,B,C,D,E
+gm partner_of gp
+A mother_of F,G
+H partner_of A
+B father_of I,J
+K partner_of B
+C father_of L
+M mother_of L
+D father_of N,O,P
+Q partner_of D
+E father_of R
+S mother_of R
+F,I,J,L,P gender_is male
+G,N,O,R gender_is female
+gm,gp deceased_is true
+gp,C,A,D,F,G,I affected_is true
+
+
+
+
+
+
