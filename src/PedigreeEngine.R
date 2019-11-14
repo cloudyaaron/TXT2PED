@@ -462,7 +462,7 @@ producePED <- function(inFile) {
       logtext <- paste(logtext,"\n", "line: ",linenum, " actions:",line) 
       act_line <- unlist(strsplit(line," "))
       
-      if (act_line[2] == "change_name") {
+      if (act_line[2] == "change_node_name") {
         request_node <- act_line[1]
         new_name <- act_line[3]
         # first check if this node is in dataframe
