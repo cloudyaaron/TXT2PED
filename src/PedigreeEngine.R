@@ -519,6 +519,96 @@ producePED <- function(inFile) {
       
       
   # ======================================================
+  # Relation: Monozygotic/Dizygotic/Unknown Twin
+  # ======================================================  
+    } else if (grepl("_twin",line) == TRUE) {
+      print(paste("line: ",linenum, " twins:",line))
+      logtext <- paste(logtext,"\n", "line: ",linenum, " twins:",line) 
+      twin_line <- unlist(strsplit(line," "))
+      node1 = twin_line[1]
+      node2 = twin_line[3]
+      # check if these node are in dataframe
+      if (!(node1 %in% df$node) && (node2 %in% df$node)) {            # node1 not in df
+        index2 = which(df$node == node2)
+        if (is.na(df$sg[index2])) {
+          df$sg[index2] = as.character(node1)
+        } else {
+          df$sg[index2] = paste(df$sg[index2], node1, sep = ",")
+        }
+        newrow <- data.frame(ped=familyid, id=ID, father=df$father[index2], mother=df$mother[index2],
+                             sex=df$sex[index2], affected=0, deceased=0, twin=NA, node=node1, name=NA,
+                             dob=NA, partner=NA, sg=c(node2), ad=NA)
+        ID <- ID + 1
+        df<-rbind(df,newrow)
+      } else if ((node1 %in% df$node) && !(node2 %in% df$node)) {     # node2 not in df
+        index1 = which(df$node == node1)
+        if (is.na(df$sg[index1])) {
+          df$sg[index1] = as.character(node2)
+        } else {
+          df$sg[index1] = paste(df$sg[index1], node2, sep = ",")
+        }
+        newrow <- data.frame(ped=familyid, id=ID, father=df$father[index1], mother=df$mother[index1],
+                             sex=df$sex[index1], affected=0, deceased=0, twin=NA, node=node1, name=NA,
+                             dob=NA, partner=NA, sg=c(node1), ad=NA)
+        ID <- ID + 1
+        df<-rbind(df,newrow)
+      } else if (!(node1 %in% df$node) && !(node2 %in% df$node)) {    # node1 and node2 not in df
+        # add node1
+        newrow <- data.frame(ped=familyid, id=ID, father=NA, mother=NA,
+                             sex=3, affected=0, deceased=0, twin=NA, node=node1, name=NA,
+                             dob=NA, partner=NA, sg=c(node2), ad=NA)
+        ID <- ID + 1
+        df<-rbind(df,newrow)
+        # add node2
+        newrow <- data.frame(ped=familyid, id=ID, father=NA, mother=NA,
+                             sex=3, affected=0, deceased=0, twin=NA, node=node2, name=NA,
+                             dob=NA, partner=NA, sg=c(node1), ad=NA)
+        ID <- ID + 1
+        df<-rbind(df,newrow)
+      }
+      
+      index1 = which(df$node == node1)
+      index2 = which(df$node == node2)
+      id1 = df$id[index1]
+      id2 = df$id[index2]
+      
+      # twins should be in the same family
+      famid1 = df$ped[index1]
+      famid2 = df$ped[index2]
+      if (famid1 != famid2) {
+        showerror <- paste("line ",linenum, " nodes are not in same family.")
+        logtext <- paste(logtext,"\n", showerror) 
+        print(showerror)
+        break
+      }
+      
+      if (twin_line[2] == "monozygotic_twin") {
+        type = 1
+        # check if they are same gender
+        if (df$sex[index1] == df$sex[index2]) {
+          df$twin[index1] = df$twin[index2] = paste(id1, id2, type, famid1, sep = ",")
+        } else {
+          showerror <- paste("line ",linenum, " monozygotic_twin must be of same gender.")
+          logtext <- paste(logtext,"\n", showerror) 
+          print(showerror)
+          break
+        }
+      } else if (twin_line[2] == "dizygotic_twin") {
+        type = 2
+        df$twin[index1] = df$twin[index2] = paste(id1, id2, type, famid1, sep = ",")
+      } else if (twin_line[2] == "unknown_twin") {
+        type = 3
+        df$twin[index1] = df$twin[index2] = paste(id1, id2, type, famid1, sep = ",")
+      } else {
+        showerror <- paste("line ",linenum, " has syntax error: 
+                           relation should be either monozygotic_twin,
+                           dizygotic_twin or unknown_twin.")
+        logtext <- paste(logtext,"\n", showerror) 
+        print(showerror)
+        break
+      }
+      
+  # ======================================================
   # Action: Change Node Name
   # ======================================================  
     } else if (grepl("change_",line) == TRUE) {
@@ -547,7 +637,7 @@ producePED <- function(inFile) {
           break
         }
       }
-    
+        
   # ======================================================
   # Alert user when syntax error with line #
   # ======================================================
@@ -624,10 +714,24 @@ producegraph <- function(df,d,position, arg) {
   }
   print(diseasenumber)
 
+  # twin matrix
+  twin_list <- unique(df$twin)
+  twin_matrix <- data.frame(matrix(nrow = 0, ncol = 4))
+  names(twin_matrix) <- c("id1", "id2", "code", "famid")
+  for (twin in twin_list) {
+    if (!(is.na(twin))) {
+      row <- t(as.numeric(unlist(strsplit(twin, ","))))
+      names(row) <- c("id1", "id2", "code", "famid")
+      twin_matrix <- rbind(twin_matrix, row)
+    }
+  }
+  names(twin_matrix) <- c("id1", "id2", "code","famid")
+  print(twin_matrix)
   
   out <- tryCatch({
     pedAll <- pedigree(id = df$id, dadid = df$father, momid = df$mother, 
-                       sex = df$sex, famid = df$ped, affected = as.matrix(aff), status = df$deceased)
+                       sex = df$sex, famid = df$ped, affected = as.matrix(aff), 
+                       status = df$deceased, relation = twin_matrix)
     ped1basic <- pedAll["1"]
     
     
@@ -642,7 +746,8 @@ producegraph <- function(df,d,position, arg) {
    
     write.table(c(cond[1]),'./output/log.txt', append = TRUE)
     pedAll <- pedigree(id = df$id, dadid = df$father, momid = df$mother, 
-                       sex = df$sex, famid = df$ped, affected = as.matrix(aff), status = df$deceased)
+                       sex = df$sex, famid = df$ped, affected = as.matrix(aff), 
+                       status = df$deceased, relation = twin_matrix)
     ped1basic <- pedAll["1"]
     write.table(c(cond[1],cond[2]),'./output/log.txt', append = TRUE)
     jpeg(out_jpg)#,res = 100 , pointsize = 0.1)
@@ -658,7 +763,8 @@ producegraph <- function(df,d,position, arg) {
     write.table(c(cond[1]),'./output/log.txt', append = TRUE)
     
     pedAll <- pedigree(id = df$id, dadid = df$father, momid = df$mother, 
-                       sex = df$sex, famid = df$ped, affected = as.matrix(aff), status = df$deceased)
+                       sex = df$sex, famid = df$ped, affected = as.matrix(aff), 
+                       status = df$deceased, relation = twin_matrix)
     ped1basic <- pedAll["1"]
     jpeg(out_jpg)#,res = 100 , pointsize = 0.1)
     plot(ped1basic,cex = d, id = idc)# ,col = ifelse(df$affected == 0 , 1, 2))
