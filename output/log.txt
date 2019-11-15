@@ -1,37 +1,20 @@
  
- line:  1 relation:  gp father_of A,B,C,D,E 
- line:  2 relation:  gm partner_of gp 
- line:  3 relation:  A mother_of F,G 
- line:  4 relation:  H partner_of A 
- line:  5 relation:  B father_of I,J 
- line:  6 relation:  K partner_of B 
- line:  7 relation:  C father_of L 
- line:  8 relation:  M mother_of L 
- line:  9 relation:  D father_of N,O,P 
- line:  10 relation:  Q partner_of D 
- line:  11 relation:  E father_of R 
- line:  12 relation:  S mother_of R 
- line:  13  attributes: F,I,J,L,P gender_is male 
- line:  14  attributes: G,N,O,R gender_is female 
- line:  15  attributes: gm,gp deceased_is true 
- line:  16  attributes: gp,C,A,D,F,G,I affected_is true 
- line  17  has syntax error
-"ped"	"id"	"father"	"mother"	"sex"	"affected"	"deceased"	"twin"	"node"	"name"	"dob"	"partner"	"sg"	"ad"	"true"
-"1"	1	1	NA	NA	1	1	1	NA	"gp"	NA	NA	7	NA	NA	1
-"2"	1	2	1	7	2	1	0	NA	"A"	NA	NA	10	NA	NA	1
-"3"	1	3	1	7	1	0	0	NA	"B"	NA	NA	13	NA	NA	0
-"4"	1	4	1	7	1	1	0	NA	"C"	NA	NA	NA	NA	NA	1
-"5"	1	5	1	7	1	1	0	NA	"D"	NA	NA	16	NA	NA	1
-"6"	1	6	1	7	1	0	0	NA	"E"	NA	NA	NA	NA	NA	0
-"7"	1	7	NA	NA	2	0	1	NA	"gm"	NA	NA	1	NA	NA	0
-"8"	1	8	10	2	1	1	0	NA	"F"	NA	NA	NA	NA	NA	1
-"9"	1	9	10	2	2	1	0	NA	"G"	NA	NA	NA	NA	NA	1
-"10"	1	10	NA	NA	1	0	0	NA	"H"	NA	NA	2	NA	NA	0
-"11"	1	11	3	13	1	1	0	NA	"I"	NA	NA	NA	NA	NA	1
-"12"	1	12	3	13	1	0	0	NA	"J"	NA	NA	NA	NA	NA	0
-"13"	1	13	NA	NA	2	0	0	NA	"K"	NA	NA	3	NA	NA	0
-"14"	1	14	5	16	1	0	0	NA	"L"	NA	NA	NA	NA	NA	0
-"15"	1	15	NA	NA	2	0	0	NA	"M"	NA	NA	NA	NA	NA	0
-"16"	1	16	NA	NA	2	0	0	NA	"Q"	NA	NA	5	NA	NA	0
-"17"	1	17	6	18	2	0	0	NA	"R"	NA	NA	NA	NA	NA	0
-"18"	1	18	NA	NA	2	0	0	NA	"S"	NA	NA	NA	NA	NA	0
+ line:  1 relation:  A father_of C,D,E,F,G,H 
+ line:  2 relation:  B mother_of C,D,E,F,G,H 
+ line:  3  twins: C m_twin D 
+ line:  4  twins: E d_twin F 
+ line:  5  twins: G unknown_twin H 
+ line:  6  attributes: A,C,D,E,G,H affected_is diseaseA 
+ line:  7  attributes: B,G,H,F affected_is diseaseB 
+ line  8  has syntax error
+"ped"	"id"	"father"	"mother"	"sex"	"affected"	"deceased"	"twin"	"node"	"name"	"dob"	"partner"	"sg"	"ad"	"diseaseA"	"diseaseB"
+"1"	1	1	NA	NA	1	1	0	NA	"A"	NA	NA	NA	NA	NA	1	0
+"2"	1	2	1	8	3	1	0	"2,3,1,1"	"C"	NA	NA	NA	NA	NA	1	0
+"3"	1	3	1	8	3	1	0	"2,3,1,1"	"D"	NA	NA	NA	NA	NA	1	0
+"4"	1	4	1	8	3	1	0	"4,5,2,1"	"E"	NA	NA	NA	NA	NA	1	0
+"5"	1	5	1	8	3	1	0	"4,5,2,1"	"F"	NA	NA	NA	NA	NA	0	1
+"6"	1	6	1	8	3	1	0	"6,7,3,1"	"G"	NA	NA	NA	NA	NA	1	1
+"7"	1	7	1	8	3	1	0	"6,7,3,1"	"H"	NA	NA	NA	NA	NA	1	1
+"8"	1	8	NA	NA	2	1	0	NA	"B"	NA	NA	NA	NA	NA	0	1
+"message"
+"1" "More than 25% of the gender values are 'unknown'"

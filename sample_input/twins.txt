@@ -1,5 +1,7 @@
 A father_of C,D,E,F,G,H
 B mother_of C,D,E,F,G,H
-C monozygotic_twin D
-E dizygotic_twin F
+C m_twin D
+E d_twin F
 G unknown_twin H
+
+

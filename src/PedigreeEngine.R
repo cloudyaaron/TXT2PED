@@ -581,8 +581,8 @@ producePED <- function(inFile) {
         print(showerror)
         break
       }
-      
-      if (twin_line[2] == "monozygotic_twin") {
+        #for monozygotic twin
+      if (twin_line[2] == "m_twin") {
         type = 1
         # check if they are same gender
         if (df$sex[index1] == df$sex[index2]) {
@@ -593,7 +593,8 @@ producePED <- function(inFile) {
           print(showerror)
           break
         }
-      } else if (twin_line[2] == "dizygotic_twin") {
+        #for dizygotic twin
+      } else if (twin_line[2] == "d_twin") {
         type = 2
         df$twin[index1] = df$twin[index2] = paste(id1, id2, type, famid1, sep = ",")
       } else if (twin_line[2] == "unknown_twin") {

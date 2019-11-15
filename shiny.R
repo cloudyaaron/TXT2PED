@@ -28,7 +28,7 @@ ui <- fillPage(
       downloadButton ( outputId =  'savebutton',label = 'Save FILE'),
       hr(),
       fileInput("file1", "Choose input text File", accept = c(".txt")),
-      textAreaInput('inputbox','command',height = '7cm'),
+      textAreaInput('inputbox','command',height = '5cm'),
       textAreaInput('console','console',height = '5cm'),
       actionButton(inputId = 'generatebutton',label = 'generate graph', icon = icon("refresh")),
       
