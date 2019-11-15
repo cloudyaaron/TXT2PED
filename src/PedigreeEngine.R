@@ -620,7 +620,13 @@ producePED <- function(inFile) {
       if (act_line[2] == "change_node_name") {
         request_node <- act_line[1]
         new_name <- act_line[3]
-        # first check if this node is in dataframe
+        # if the new name is in dataframe
+        if (new_name %in% df$node){
+          showerror <- paste("line ", linenum, " WARNING:", new_name, "has been used.")
+          logtext <- paste(logtext,"\n", showerror) 
+          print(showerror)
+        }
+        # check if this node is in dataframe
         if (request_node %in% df$node) {
           # change node's name
           # by default, df$node is Factor, to edit it, we need to change df$node to Character
