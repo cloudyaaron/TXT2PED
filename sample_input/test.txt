@@ -1,0 +1,6 @@
+A father_of B,V,D
+Z partner_of A
+
+
+
+

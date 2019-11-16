@@ -107,7 +107,7 @@ producePED <- function(inFile) {
           for (pe in people){
             peindex <- which(df$node == pe)
             
-            df[peindex,'sex'] <- gender
+            df$sex[peindex] <- gender
           }
         } else {
           
@@ -127,7 +127,7 @@ producePED <- function(inFile) {
             index <- which(temp == TRUE)
             
             #col 5 is gender
-            df[index,5] <- gender
+            df$sex[index] <- gender
           }
           
         }
@@ -162,7 +162,7 @@ producePED <- function(inFile) {
           index <- which(temp == TRUE)
           
           #col 9 is name
-          df[index,9] <- tname
+          df$name[index] <- tname
         }
       
         
@@ -703,7 +703,9 @@ producegraph <- function(df,d,position, arg) {
   
   diseasenumber <- length(names(df)) - 14
   if (diseasenumber == 1){
-    aff <- df[,15]
+    aff <-  df[,15:15]
+    aff <- as.data.frame(aff)
+    names(aff)[1] <- names(df[15])
   } else if (diseasenumber == 2){
     aff <- df[,15:16]
   } else if(diseasenumber == 3){
@@ -714,8 +716,14 @@ producegraph <- function(df,d,position, arg) {
     aff <- df$affected
   }
   print(diseasenumber)
+  print(aff)
+  print(length(aff))
+  print(typeof(aff))
 
   # twin matrix
+  
+  
+  
   twin_list <- unique(df$twin)
   twin_matrix <- data.frame(matrix(nrow = 0, ncol = 4))
   names(twin_matrix) <- c("id1", "id2", "code", "famid")
@@ -727,7 +735,7 @@ producegraph <- function(df,d,position, arg) {
     }
   }
   names(twin_matrix) <- c("id1", "id2", "code","famid")
-  print(twin_matrix)
+  #print(twin_matrix)
   
   out <- tryCatch({
     pedAll <- pedigree(id = df$id, dadid = df$father, momid = df$mother, 
@@ -738,7 +746,7 @@ producegraph <- function(df,d,position, arg) {
     
     jpeg(out_jpg)#,res = 100 , pointsize = 0.1)
     plot(ped1basic,cex = d, id = idc)# ,col = ifelse(df$affected == 0 , 1, 2))
-    pedigree.legend(ped1basic,location = position, radius = d/5)
+    pedigree.legend(ped1basic,location = position, radius = d/6)
     dev.off()
     
   },
@@ -753,7 +761,7 @@ producegraph <- function(df,d,position, arg) {
     write.table(c(cond[1],cond[2]),'./output/log.txt', append = TRUE)
     jpeg(out_jpg)#,res = 100 , pointsize = 0.1)
     plot(ped1basic,cex = d, id = idc)# ,col = ifelse(df$affected == 0 , 1, 2))
-    pedigree.legend(ped1basic,location = position, radius = d/5)
+    pedigree.legend(ped1basic,location = position, radius = d/6)
     dev.off()
   },
   warning  = function(cond){
@@ -769,7 +777,7 @@ producegraph <- function(df,d,position, arg) {
     ped1basic <- pedAll["1"]
     jpeg(out_jpg)#,res = 100 , pointsize = 0.1)
     plot(ped1basic,cex = d, id = idc)# ,col = ifelse(df$affected == 0 , 1, 2))
-    pedigree.legend(ped1basic,location = position, radius = d/5)
+    pedigree.legend(ped1basic,location = position, radius = d/6)
     dev.off()
   },
   finallly = {

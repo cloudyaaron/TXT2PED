@@ -24,10 +24,10 @@ ui <- fillPage(
     "))),
   sidebarLayout(
     sidebarPanel(
-      actionButton(inputId = 'newbutton',label = 'New FILE', width = '200px'),
+      downloadButton(outputId = 'newbutton',label = 'New FILE', width = '200px'),
       downloadButton ( outputId =  'savebutton',label = 'Save FILE'),
       hr(),
-      fileInput("file1", "Choose input text File", accept = c(".txt")),
+      fileInput("file1", "Load input text File", accept = c(".txt"),buttonLabel = "You are working on"),
       textAreaInput('inputbox','command',height = '5cm'),
       textAreaInput('console','console',height = '5cm'),
       actionButton(inputId = 'generatebutton',label = 'generate graph', icon = icon("refresh")),
@@ -80,21 +80,22 @@ server <- function(input, output,session) {
     shinyjs::disable("console")
 
     if (is.null( relation_file)){ 
+      
       blank <- paste(getwd(),'/src/blank.png',sep = '')
       pedigree <- normalizePath(blank)
       list(src = pedigree)
     } else{
       text <- preview(input$file1$datapath)
-      
+      updateTextAreaInput(session,'inputbox',
+                          value = text                        
+      )
 
       ped <- producePED(relation_file$datapath)
       #print(ped)
       out_jpg_path <- producegraph(ped,input$distance,input$legendPosition,input$variable)
       pedigree <- normalizePath(file.path(out_jpg_path))
       logtext <- getlog()
-      updateTextAreaInput(session,'inputbox',
-                          value = text                        
-      )
+
       updateTextAreaInput(session,'console',
                           value = logtext                        
       )
@@ -107,8 +108,14 @@ server <- function(input, output,session) {
   #update preview box
   observeEvent(input$generatebutton,{
     print(input$file1)
-    
-    con <- file(input$file1$datapath)
+    if (is.null(input$file1)){
+      blank <- paste(getwd(),'/src/blank.png',sep = '')
+      pedigree <- normalizePath(blank)
+      list(src = pedigree)
+      return()
+    } else{
+      con <- file(input$file1$datapath)
+    }
     writeLines(input$inputbox,con)
     close(con)
     text <- preview(input$file1$datapath)
@@ -163,7 +170,9 @@ server <- function(input, output,session) {
   })
   
   output$savebutton <- downloadHandler(
+    
     filename = function(){
+      
       paste(input$file1$name)
     },
     
@@ -187,9 +196,25 @@ server <- function(input, output,session) {
       write.csv(ped[,1:7],con)
       
     },
-    contentType = ".ped"
+    contentType = "ped"
   )
   
+  rv <- reactiveValues(download_flag = 0)
+  
+  observeEvent(rv$download_flag, {
+    shinyjs::alert("When New File created, Please load the new file!")
+  }, ignoreInit = TRUE)
+  
+  output$newbutton <- downloadHandler(
+    filename = function(){
+      paste("Newfile.txt")
+    },
+    content = function(con){
+      writeLines("new",con)
+      rv$download_flag <- rv$download_flag + 1
+    },
+    contentType = "txt/csv"
+  )
   #download event
 #  output$downloadbutton <- downloadHandler(
  #   filename = input$pedigreeText$value,
