@@ -1,0 +1,26 @@
+ 
+ line:  1 relation:  A father_of C,D,F 
+ line:  2 relation:  B partner_of A 
+ line:  3 relation:  E father_of G,I,J 
+ line:  4 relation:  H partner_of E 
+ line:  5 relation:  F father_of Z,V 
+ line:  6 relation:  G mother_of Z,V 
+ line:  7  attributes: C,D,I gender_is male 
+ line:  8  attributes: J,Z,V gender_is female 
+ line:  9  attributes: A,C,F,Z,V affected_is diseaseA 
+ line:  10  attributes: E,G,Z affected_is diseaseB 
+ line:  11  twins: Z d_twin V 
+ line  12  has syntax error
+"ped"	"id"	"father"	"mother"	"sex"	"affected"	"deceased"	"twin"	"node"	"name"	"dob"	"partner"	"sg"	"ad"	"diseaseA"	"diseaseB"
+"1"	1	1	NA	NA	1	1	0	NA	"A"	NA	NA	5	NA	NA	1	0
+"2"	1	2	1	5	1	1	0	NA	"C"	NA	NA	NA	NA	NA	1	0
+"3"	1	3	1	5	1	0	0	NA	"D"	NA	NA	NA	NA	NA	0	0
+"4"	1	4	1	5	1	1	0	NA	"F"	NA	NA	NA	NA	NA	1	0
+"5"	1	5	NA	NA	2	0	0	NA	"B"	NA	NA	1	NA	NA	0	0
+"6"	1	6	NA	NA	1	1	0	NA	"E"	NA	NA	10	NA	NA	0	1
+"7"	1	7	6	10	2	1	0	NA	"G"	NA	NA	NA	NA	NA	0	1
+"8"	1	8	6	10	1	0	0	NA	"I"	NA	NA	NA	NA	NA	0	0
+"9"	1	9	6	10	2	0	0	NA	"J"	NA	NA	NA	NA	NA	0	0
+"10"	1	10	NA	NA	2	0	0	NA	"H"	NA	NA	6	NA	NA	0	0
+"11"	1	11	4	7	2	1	0	"11,12,2,1"	"Z"	NA	NA	NA	NA	NA	1	1
+"12"	1	12	4	7	2	1	0	"11,12,2,1"	"V"	NA	NA	NA	NA	NA	1	0

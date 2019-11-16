@@ -9,6 +9,8 @@ source("./src/PedigreeEngine.R")
 if(!require(shinythemes)) install.packages("shinythemes")
 
 
+
+
 # Define UI ----
 ui <- fillPage(
   shinyjs::useShinyjs(),
@@ -40,20 +42,25 @@ ui <- fillPage(
     mainPanel(
       fluidRow(
         column(3,
-          selectizeInput(inputId = "legendPosition",'Legend position', choices = c("Top right" = "topright",  "Top left" = "topleft", "Bottom right" = "bottomright", "Bottom left" = "bottomleft")),
-          sliderInput('distance','Distance between nodes',min = 0.01,max = 2,value = 0.7)
+          
+          sliderInput('distance','Distance between nodes',min = 0.01,max = 2,value = 0.7),
+          sliderInput('size','Legend size',min = 0.001,max = 0.5,value = 0.05)
         ),
 
         column(3, style="padding-top:25px",
-               downloadButton('exportbutton', 'Export Pedigree file'),
+               selectizeInput(inputId = "legendPosition",'Legend position', choices = c("Top right" = "topright",  "Top left" = "topleft", "Bottom right" = "bottomright", "Bottom left" = "bottomleft")),
                hr(),
-               checkboxGroupInput("variable", "Variables to show:",
-                                  c("ID" = "id",
-                                    "Real name" = "name",
-                                    "Date of birth" = "dob",
-                                    "Affected" = "affect",
-                                    "Addtional Text" = "ad"), inline = TRUE)
-        )
+               downloadButton('exportbutton', 'Export Pedigree file'),
+               
+
+        ), 
+        column(3,               checkboxGroupInput("variable", "Variables to show:",
+                                                   c("ID" = "id",
+                                                     "Real name" = "name",
+                                                     "Date of birth" = "dob",
+                                                     "Affected" = "affect",
+                                                     "Addtional Text" = "ad"), inline = TRUE))
+        
       ),
       hr(),
       imageOutput("image"),
@@ -92,7 +99,7 @@ server <- function(input, output,session) {
 
       ped <- producePED(relation_file$datapath)
       #print(ped)
-      out_jpg_path <- producegraph(ped,input$distance,input$legendPosition,input$variable)
+      out_jpg_path <- producegraph(ped,input$distance,input$legendPosition,input$variable,input$size)
       pedigree <- normalizePath(file.path(out_jpg_path))
       logtext <- getlog()
 
@@ -144,7 +151,7 @@ server <- function(input, output,session) {
         
         
         
-        out_jpg_path <- producegraph(ped,input$distance,input$legendPosition,input$variable)
+        out_jpg_path <- producegraph(ped,input$distance,input$legendPosition,input$variable,input$size)
         pedigree <- normalizePath(file.path(out_jpg_path))
         logtext <- getlog()
         updateTextAreaInput(session,'inputbox',

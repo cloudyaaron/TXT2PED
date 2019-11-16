@@ -37,7 +37,7 @@ preview <- function(path){
 
 getlog <- function(){
   
-  con <- file("./output/log.txt","r")
+  con <- file("./output/log.rtf","r")
   line <- readLines(con, n = 1)
   t <- ""
   
@@ -58,7 +58,7 @@ producePED <- function(inFile) {
   file_name = as.character(inFile)
   #print(file_name)
   con <- file(file_name,"r")
-  logcon <- file("./output/log.txt")
+  logcon <- file("./output/log.rtf")
   
   #read line one by one by the provindg file
   line <- readLines(con, n = 1)
@@ -671,11 +671,11 @@ producePED <- function(inFile) {
   #print_ped(df)
   close(con)
   close(logcon)
-  write.table(df,'./output/log.txt', append = TRUE, sep = "\t")
+  write.table(df,'./output/log.rtf', append = TRUE, sep = "\t")
   return(df)
 }
 
-producegraph <- function(df,d,position, arg) {
+producegraph <- function(df,d,position, arg,legendsize) {
   # ======================================================
   # graph
   # ======================================================
@@ -752,22 +752,22 @@ producegraph <- function(df,d,position, arg) {
     
     jpeg(out_jpg)#,res = 100 , pointsize = 0.1)
     plot(ped1basic,cex = d, id = idc)# ,col = ifelse(df$affected == 0 , 1, 2))
-    pedigree.legend(ped1basic,location = position, radius = d/6)
+    pedigree.legend(ped1basic,location = position, radius = legendsize)
     dev.off()
     
   },
   error = function(cond){
     print(cond)
    
-    write.table(c(cond[1]),'./output/log.txt', append = TRUE)
+    write.table(c(cond[1]),'./output/log.rtf', append = TRUE)
     pedAll <- pedigree(id = df$id, dadid = df$father, momid = df$mother, 
                        sex = df$sex, famid = df$ped, affected = as.matrix(aff), 
                        status = df$deceased, relation = twin_matrix)
     ped1basic <- pedAll["1"]
-    write.table(c(cond[1],cond[2]),'./output/log.txt', append = TRUE)
+    write.table(c(cond[1],cond[2]),'./output/log.rtf', append = TRUE)
     jpeg(out_jpg)#,res = 100 , pointsize = 0.1)
     plot(ped1basic,cex = d, id = idc)# ,col = ifelse(df$affected == 0 , 1, 2))
-    pedigree.legend(ped1basic,location = position, radius = d/6)
+    pedigree.legend(ped1basic,location = position, radius = legendsize)
     dev.off()
   },
   warning  = function(cond){
@@ -775,7 +775,7 @@ producegraph <- function(df,d,position, arg) {
     print(msg)
     
 
-    write.table(c(cond[1]),'./output/log.txt', append = TRUE)
+    write.table(c(cond[1]),'./output/log.rtf', append = TRUE)
     
     pedAll <- pedigree(id = df$id, dadid = df$father, momid = df$mother, 
                        sex = df$sex, famid = df$ped, affected = as.matrix(aff), 
@@ -783,11 +783,11 @@ producegraph <- function(df,d,position, arg) {
     ped1basic <- pedAll["1"]
     jpeg(out_jpg)#,res = 100 , pointsize = 0.1)
     plot(ped1basic,cex = d, id = idc)# ,col = ifelse(df$affected == 0 , 1, 2))
-    pedigree.legend(ped1basic,location = position, radius = d/6)
+    pedigree.legend(ped1basic,location = position, radius = legendsize)
     dev.off()
   },
   finallly = {
-    # write.csv(df[,1:10],'./output/log.txt')
+    
     dev.off}
   )
   
@@ -796,60 +796,7 @@ producegraph <- function(df,d,position, arg) {
   return(out_jpg)
 }
 
-# #reading each line of the text file 
-# con <- file(args[1],"r")
-# 
-# producePED(con)
-# 
-# #close connection to the file
 
-# ======================================================
-# paraphase finished
-# ======================================================
-
-
-# # ======================================================
-# # graph
-# # ======================================================
-# 
-# out <- tryCatch({
-#   pedAll <- pedigree(id = df$id, dadid = df$father, momid = df$mother, 
-#                      sex = df$sex, famid = df$ped, affected = df$affected, status = df$deceased)
-#   ped1basic <- pedAll["1"]
-#   jpeg('./output/output.jpg')#,res = 100 , pointsize = 0.1)
-#   plot(ped1basic,cex = 0.9, id = df$node,col = ifelse(!(is.na(df$affected)) && (df$affected == 0) , 'red', 'black'))
-#   pedigree.legend(ped1basic,location = 'bottomright', radius = 0.05)
-#   dev.off()
-#   
-#   },
-#   error = function(cond){
-#     msg <-  "fatal error occur, plz remember what has been input and contact the dev group"
-#     print(msg)
-#     print(cond)
-#     pedAll <- pedigree(id = df$id, dadid = df$father, momid = df$mother, 
-#                        sex = df$sex, famid = df$ped)
-#     ped1basic <- pedAll["1"]
-#     jpeg('./output/output.jpg')#,res = 100 , pointsize = 0.1)
-#     plot(ped1basic,cex = 0.9, id = df$node,col = ifelse(!(is.na(df$affected)) && (df$affected == 0) , 'red', 'black'))
-#     pedigree.legend(ped1basic,location = 'bottomright', radius = 0.05)
-#     dev.off()
-#   },
-#   warning  = function(cond){
-#     msg <- 'warnning occur'
-#     print(msg)
-#     print(cond)
-#     pedAll <- pedigree(id = df$id, dadid = df$father, momid = df$mother, 
-#                        sex = df$sex, famid = df$ped, status = df$deceased)
-#     ped1basic <- pedAll["1"]
-#     jpeg('./output/output.jpg')#,res = 100 , pointsize = 0.1)
-#     plot(ped1basic,cex = 0.9, id = df$node,col = ifelse(!(is.na(df$affected)) && (df$affected == 0) , 'red', 'black'))
-#     pedigree.legend(ped1basic,location = 'bottomright', radius = 0.05)
-#     dev.off()
-#   },
-#   finallly = {
-#     write.csv(df[,1:10],'./output/log.txt')
-#     dev.off}
-# )
 
 
 

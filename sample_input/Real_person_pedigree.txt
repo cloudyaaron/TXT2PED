@@ -1,5 +1,3 @@
-nn deceased_is true
-nn affected_is true
 yy father_of gugu
 nn mother_of gugu
 yy father_of dashu
@@ -64,3 +62,5 @@ z3 gender_is male
 j3 mother_of z4
 jf3 father_of z4
 z4 gender_is male
+nn deceased_is true
+nn affected_is true
