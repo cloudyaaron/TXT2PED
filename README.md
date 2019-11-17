@@ -40,25 +40,25 @@ More example input can be found in the sampleinput folder.
 ## The list of all possible input is listed below.
 ### List of Terms:
 
-A gender_is male
-A,B,C gender_is female
-A name_is "John Doe"
-A DOSB_is "13 Oct 1970"
-A affect_is diseaseA
-A deceased_is true
-A,B,C deceased_is true
-A affected_is diseaseA,B,C
-A,B,C affected_is diseaseX,Y,Z
+1. A gender_is male
+2. A,B,C gender_is female
+3. A name_is "John Doe"
+4. A DOSB_is "13 Oct 1970"
+5. A affect_is diseaseA
+6. A deceased_is true
+7. A,B,C deceased_is true
+8. A affected_is diseaseA,B,C
+9. A,B,C affected_is diseaseX,Y,Z
 
 ### Relationships (Edges):
-A father_of B
-A father_of B,C,D
-A mother_of B
-A mother_of B,C,D
-A partner_of B
-A m_twin B
-A d_twin B
-A unkonwn_twin B
+1. A father_of B
+2. A father_of B,C,D
+3. A mother_of B
+4. A mother_of B,C,D
+5. A partner_of B
+6. A m_twin B
+7. A d_twin B
+8. A unkonwn_twin B
 
 **TO FIND More help plz find documentation in the REPO**
 
