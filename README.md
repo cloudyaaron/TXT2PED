@@ -7,7 +7,17 @@ In most clinical settings, pedigree charts are still drawn by hand on paper, whi
 
 In this project, we aim to develop a pedigree drawing engine that can create pedigree charts as the example above from simple textual descriptions. The concept is similar to Graphviz (https://www.graphviz.org/) and mermaid (https://mermaidjs.github.io/), two projects that allow creating graphs and diagrams using a simple text syntax.
 
-**To be able to use this pedigree engine, R need to be installed. To have a better experience, python3 will be required to install. Python wil auto install any needed python package. But R module kinship2 needed manual install. To install kinship 2 use command 'install.packages('kinship 2') in R console.**
+## Use and Install
+There are currently two ways to access the Pedigree Engine:
+1. Directly access through web:
+    https://6112project.shinyapps.io/Pedigree_project/
+
+
+2. Clone the repo and run the shiny.R in Rstudio.
+
+
+~~To be able to use this pedigree engine, R need to be installed. To have a better experience, python3 will be required to install. Python wil auto install any needed python package. But R module kinship2 needed manual install. To install kinship 2 use command 'install.packages('kinship 2') in R console.~~
+Python version was no longer in develop
 
 ## Examples
 **using command below will generate graph:**
@@ -22,6 +32,10 @@ In this project, we aim to develop a pedigree drawing engine that can create ped
 9. A,C,F,Z,V affected_is diseaseA
 10. E,G,Z affected_is diseaseB
 11. Z d_twin V
+
+![alt text](https://github.com/cloudyaaron/6112project/blob/master/src/example.jpg "Example pedigree graph")
+
+More example input can be found in the sampleinput folder.
 
 ## The list of all possible input is listed below.
 ### List of Terms:
