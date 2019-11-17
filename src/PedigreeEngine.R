@@ -710,7 +710,7 @@ producePED <- function(inFile) {
   close(con)
   close(logcon)
   write.table(df,'./output/log.rtf', append = TRUE, sep = "\t")
-  print(str(df))
+  #print(str(df))
   return(df)
 }
 
