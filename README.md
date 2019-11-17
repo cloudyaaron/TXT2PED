@@ -1,4 +1,5 @@
-# Drawing Pedigree Charts from Simple Text Descriptions
+# TXT2PED
+Drawing Pedigree Charts from Simple Text Descriptions
 
 ## Proposal
 Pedigree charts are used in Medicine to record a patient’s family history. They are particularly useful to document genetic diseases that can be inherited from one generation to the next. The example below shows a pedigree chart of a (fictitious) family where multiple individuals are affected by breast cancer:
@@ -8,7 +9,7 @@ In most clinical settings, pedigree charts are still drawn by hand on paper, whi
 In this project, we aim to develop a pedigree drawing engine that can create pedigree charts as the example above from simple textual descriptions. The concept is similar to Graphviz (https://www.graphviz.org/) and mermaid (https://mermaidjs.github.io/), two projects that allow creating graphs and diagrams using a simple text syntax.
 
 ## Use and Install
-There are currently two ways to access the Pedigree Engine:
+There are currently two ways to access the TXT2PED:
 1. Directly access through web:
 
     (Maybe not able to access due to limit active policy on shinyapps.io (we were using a free account). )

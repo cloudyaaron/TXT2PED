@@ -17,7 +17,7 @@ ui <- fillPage(
   padding = 5,
   theme = shinytheme("journal"),
   shinythemes::themeSelector(),
-  titlePanel("Pedigree Engine"),
+  titlePanel("TXT2PED"),
   tags$head(tags$script(HTML("
         // Enable navigation prompt
         window.onbeforeunload = function() {
