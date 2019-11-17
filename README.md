@@ -10,6 +10,8 @@ In this project, we aim to develop a pedigree drawing engine that can create ped
 ## Use and Install
 There are currently two ways to access the Pedigree Engine:
 1. Directly access through web:
+
+    (Maybe not able to access due to limit active policy on shinyapps.io (we were using a free account). )
     https://6112project.shinyapps.io/Pedigree_project/
 
 
