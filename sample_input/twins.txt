@@ -1,7 +1,8 @@
 A father_of C,D,E,F,G,H
 B mother_of C,D,E,F,G,H
+C gender_is male
 C m_twin D
+E sister_of F
+F gender_is male
 E d_twin F
 G unknown_twin H
-
-

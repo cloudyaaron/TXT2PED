@@ -455,65 +455,77 @@ producePED <- function(inFile) {
         } else {                        # sister: female
           node1_sex = 2
         }
+        
         # check if these two persons in the dataframe
-        if (node1 %in% df$node && node2 %in% df$node){
-          index1 = which(df$node == node1)
+        if ( !(node1 %in% df$node) && (node2 %in% df$node) ) {          # if node1 not in dataframe
           index2 = which(df$node == node2)
-          # add gender for node 1
-          df$sex[index1] = node1_sex
-          # check if they have parents, they should have same parents
-          if (is.na(df$father[index1]) && !is.na(df$father[index2])) {
-            df$father[index1] = df$father[index2]
-          } else if (is.na(df$father[index2]) && !is.na(df$father[index1])) {
-            df$father[index2] = df$father[index1]
-          }
-          if (is.na(df$mother[index1]) && !is.na(df$mother[index2])) {
-            df$mother[index1] = df$mother[index2]
-          } else if (is.na(df$father[index2]) && !is.na(df$father[index1])) {
-            df$mother[index2] = df$mother[index1]
-          }
-          # else they both don't have parents in dataframe, leave the values as NA
-          
-          # add same generation to each other, node name as string
-          if (is.na(df$sg[index1])) {
-            df$sg[index1] = as.character(node2)
-          } else {
-            # if node2 is not in node1's sg
-            if (!grepl(node2, df$sg[index1])) {
-              df$sg[index1] = paste(df$sg[index1], node2, sep = ",")
-            }
-            
-          }
-          if (is.na(df$sg[index2])) {
-            df$sg[index2] = as.character(node1)
-          } else {
-            # if node1 is not in node2's sg
-            if (!grepl(node1, df$sg[index2])) {
-              df$sg[index2] = paste(df$sg[index2], node1, sep = ",")
-            }
-          }
-        # if node1 not in dataframe
-        } else if (!(node1 %in% df$node)) {
           f = df$father[index2]
           m = df$mother[index2]
-          newrow <- data.frame(ped=familyid,id=ID,father=f,mother=m,sex=node1_sex,affected=0,deceased=0,twin=NA,node=node2,name=NA,dob=NA,partner=NA,sg=c(node1),ad=NA)
+          newrow <- data.frame(ped=familyid,id=ID,father=f,mother=m,sex=node1_sex,affected=0,deceased=0,twin=NA,node=node1,name=NA,dob=NA,partner=NA,sg=c(node1),ad=NA)
           ID <- ID + 1
           df<-rbind(df,newrow)
-        # if node2 not in dataframe
-        } else if (!(node2 %in% df$node)) {
+        
+        } else if (!(node2 %in% df$node) && (node1 %in% df$node) ) {    # if node2 not in dataframe
+          index1 = which(df$node == node1)
           f = df$father[index1]
           m = df$mother[index1]
-          newrow <- data.frame(ped=familyid,id=ID,father=f,mother=m,sex = 3,affected=0,deceased=0,twin=NA,node=node1,name=NA,dob=NA,partner=NA,sg=c(node2),ad=NA)
+          newrow <- data.frame(ped=familyid,id=ID,father=f,mother=m,sex = 3,affected=0,deceased=0,twin=NA,node=node2,name=NA,dob=NA,partner=NA,sg=c(node2),ad=NA)
           ID <- ID + 1
           df<-rbind(df,newrow)
-        # if both not in dataframe
-        } else {
+        
+        } else if ( !(node1 %in% df$node) && !(node2 %in% df$node) ) {  # if both not in dataframe
           newrow <- data.frame(ped=familyid,id=ID,father=NA,mother=NA,sex=node1_sex,affected=0,twin=NA,deceased=0,node=node1,name=NA,dob=NA,partner=NA,sg=c(node2),ad=NA)
           ID <- ID + 1
           df<-rbind(df,newrow)
           newrow <- data.frame(ped=familyid,id=ID,father=NA,mother=NA,sex = 3,affected=0,deceased=0,twin=NA,node=node2,name=NA,dob=NA,partner=NA,sg=c(node1),ad=NA)
           ID <- ID + 1
           df<-rbind(df,newrow)
+        }
+        
+        index1 = which(df$node == node1)
+        index2 = which(df$node == node2)
+        
+        # add gender for node 1
+        df$sex[index1] = node1_sex
+        
+        # check if they have parents, they should have same parents
+        if (is.na(df$father[index1]) && !is.na(df$father[index2])) {
+          df$father[index1] = df$father[index2]
+        } else if (is.na(df$father[index2]) && !is.na(df$father[index1])) {
+          df$father[index2] = df$father[index1]
+        }
+        if (is.na(df$mother[index1]) && !is.na(df$mother[index2])) {
+          df$mother[index1] = df$mother[index2]
+        } else if (is.na(df$father[index2]) && !is.na(df$father[index1])) {
+          df$mother[index2] = df$mother[index1]
+        }
+        # else they both don't have parents in dataframe, leave the values as NA
+        
+        # check if they have SAME parents
+        if ( (df$father[index1] != df$father[index2]) && (df$mother[index1] != df$mother[index2]) ) {
+          showerror <- paste("line ",linenum, " nodes DO NOT have same parents.")
+          logtext <- paste(logtext,"\n", showerror) 
+          print(showerror)
+          break
+        }
+        
+        # add same generation to each other, node name as string
+        if (is.na(df$sg[index1])) {
+          df$sg[index1] = as.character(node2)
+        } else {
+          # if node2 is not in node1's sg
+          if (!grepl(node2, df$sg[index1])) {
+            df$sg[index1] = paste(df$sg[index1], node2, sep = ",")
+          }
+          
+        }
+        if (is.na(df$sg[index2])) {
+          df$sg[index2] = as.character(node1)
+        } else {
+          # if node1 is not in node2's sg
+          if (!grepl(node1, df$sg[index2])) {
+            df$sg[index2] = paste(df$sg[index2], node1, sep = ",")
+          }
         }
       }
       
@@ -581,19 +593,45 @@ producePED <- function(inFile) {
         print(showerror)
         break
       }
-        #for monozygotic twin
+      
+      # add same generation to each other, node name as string
+      if (is.na(df$sg[index1])) {
+        df$sg[index1] = as.character(node2)
+      } else {
+        # if node2 is not in node1's sg
+        if (!grepl(node2, df$sg[index1])) {
+          df$sg[index1] = paste(df$sg[index1], node2, sep = ",")
+        }
+        
+      }
+      if (is.na(df$sg[index2])) {
+        df$sg[index2] = as.character(node1)
+      } else {
+        # if node1 is not in node2's sg
+        if (!grepl(node1, df$sg[index2])) {
+          df$sg[index2] = paste(df$sg[index2], node1, sep = ",")
+        }
+      }
+      
+      #for monozygotic twin
       if (twin_line[2] == "m_twin") {
         type = 1
         # check if they are same gender
         if (df$sex[index1] == df$sex[index2]) {
           df$twin[index1] = df$twin[index2] = paste(id1, id2, type, famid1, sep = ",")
+        } else if (df$sex[index1] == 3) {
+          df$sex[index1] = df$sex[index2]
+          df$twin[index1] = df$twin[index2] = paste(id1, id2, type, famid1, sep = ",")
+        } else if (df$sex[index2] == 3) {
+          df$sex[index2] = df$sex[index1]
+          df$twin[index1] = df$twin[index2] = paste(id1, id2, type, famid1, sep = ",")
         } else {
-          showerror <- paste("line ",linenum, " monozygotic_twin must be of same gender.")
+          showerror <- paste("line ",linenum, " m_twin must be of same gender.")
           logtext <- paste(logtext,"\n", showerror) 
           print(showerror)
           break
         }
-        #for dizygotic twin
+      #for dizygotic twin
       } else if (twin_line[2] == "d_twin") {
         type = 2
         df$twin[index1] = df$twin[index2] = paste(id1, id2, type, famid1, sep = ",")
@@ -672,6 +710,7 @@ producePED <- function(inFile) {
   close(con)
   close(logcon)
   write.table(df,'./output/log.rtf', append = TRUE, sep = "\t")
+  print(str(df))
   return(df)
 }
 
