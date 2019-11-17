@@ -26,6 +26,7 @@ ui <- fillPage(
     "))),
   sidebarLayout(
     sidebarPanel(
+      helpText("ZOOM out if needed\n"),
       downloadButton(outputId = 'newbutton',label = 'New FILE', width = '200px'),
       downloadButton ( outputId =  'savebutton',label = 'Save FILE'),
       hr(),

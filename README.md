@@ -68,6 +68,12 @@ More example input can be found in the sampleinput folder.
 7. A d_twin B
 8. A unkonwn_twin B
 
+
+**Sequence of input is important.**
+**Different sequence of input may result in different graph.**
+
+**Twin relation and Affected attribute must be assigned at last or after creating every node otherwise an error will rise.**
+
 **TO FIND More help plz find documentation in the REPO**
 
 
