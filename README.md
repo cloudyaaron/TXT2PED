@@ -33,6 +33,9 @@ Python version was no longer in develop
 10. E,G,Z affected_is diseaseB
 11. Z d_twin V
 
+**Affected attribute must be assign at last or after creating every nodes otherwise an error will rise.**
+
+
 ![alt text](https://github.com/cloudyaaron/6112project/blob/master/src/example.jpg "Example pedigree graph")
 
 More example input can be found in the sampleinput folder.
@@ -40,15 +43,18 @@ More example input can be found in the sampleinput folder.
 ## The list of all possible input is listed below.
 ### List of Terms:
 
+**Affected attributes should be define after all nodes has been created**
+
 1. A gender_is male
 2. A,B,C gender_is female
 3. A name_is "John Doe"
-4. A DOSB_is "13 Oct 1970"
+4. A DOB_is "13 Oct 1970"
 5. A affect_is diseaseA
 6. A deceased_is true
 7. A,B,C deceased_is true
 8. A affected_is diseaseA,B,C
 9. A,B,C affected_is diseaseX,Y,Z
+10. A ad_is "additional text""
 
 ### Relationships (Edges):
 1. A father_of B
