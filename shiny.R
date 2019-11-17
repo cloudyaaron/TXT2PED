@@ -30,6 +30,8 @@ ui <- fillPage(
       downloadButton ( outputId =  'savebutton',label = 'Save FILE'),
       hr(),
       fileInput("file1", "Load input text File", accept = c(".txt"),buttonLabel = "You are working on"),
+      helpText("FIND input format on","https://github.com/cloudyaaron/6112project/"),
+      
       textAreaInput('inputbox','command',height = '5cm'),
       textAreaInput('console','console',height = '5cm'),
       actionButton(inputId = 'generatebutton',label = 'generate graph', icon = icon("refresh")),
