@@ -346,14 +346,20 @@ producePED <- function(inFile) {
           
         #if there is more than one children
         if (grepl(',', rline[3]) == TRUE){
-          children <<- unlist(strsplit(rline[3],','))
-          #print('many childrens')
+          children <- unlist(strsplit(rline[3],','))
+          print('many childrens')
           for (child in children){
             if (!(child %in% df$node)){
               newrow <- data.frame(ped=familyid,id = ID,father=NA,mother=NA,sex = 3,affected=0,deceased=0,twin=NA,node = child,name=NA,dob=NA,partner=NA,sg=NA,ad=NA)
               ID <- ID + 1
               df<-rbind(df,newrow)
             }
+          }
+          parentindex <- which(df$node == rline[1])
+          df[parentindex,'sex'] <- coln-2
+          for(child in children){
+            childindex <- which(df$node == child)
+            df[childindex,coln] <- df[parentindex,2]
           }
         } else {
           children <- c(rline[3])
@@ -363,19 +369,21 @@ producePED <- function(inFile) {
             newrow <- data.frame(ped=familyid,id = ID,father=NA,mother=NA,sex = 3,affected=0,deceased=0,twin=NA,node=rline[3],name=NA,dob=NA,partner=NA,sg=NA,ad=NA)
             ID <- ID + 1
             df<-rbind(df,newrow)
-            }
+          }
+          parentindex <- which(df$node == rline[1])
+          df[parentindex,'sex'] <- coln-2
+          for(child in children){
+            childindex <- which(df$node == child)
+            df[childindex,coln] <- df[parentindex,2]
+          }
         }
         #print(children)
         
         # change parent into appropriet gender
-        parentindex <- which(df$node == rline[1])
-        df[parentindex,'sex'] <- coln-2
+
         
         #change children or single child parent's col
-        for(child in children){
-          childindex <- which(df$node == child)
-          df[childindex,coln] <- df[parentindex,2]
-        }
+
   
         
   # ======================================================

@@ -1,0 +1,61 @@
+V mother_of E,V1,A,Af,Ar,L,He,B
+E father_of G5
+O partner_of E
+G5 father_of G6
+O4 partner_of G5
+A1 partner_of V
+V1 mother_of H,W
+O1 partner_of V1
+A mother_of I,F,A2
+O2 partner_of A
+L father_of A3
+O3 partner_of L
+B mother_of V2,L1,M1
+B1 partner_of B
+H father_of W1,u,H1
+I mother_of W1,u,H1
+A2 mother_of A4,u1
+N partner_of A2
+A3 mother_of L2,M
+A5 partner_of A3
+V2 mother_of A6,G,u2
+A7 partner_of V2
+Af,Ar,W,G6,W1,H1,u,F,A4,L2,A6,G,L1,M1 gender_is male
+u1,u2,M,He gender_is female
+A4,L,F,L1,M1,A6,G,L2,W1,H1,V,A,B,V2,A3,A2,I affected_is carrier
+L,F,L1,M1,A6,G,L2,W1,H1,A4 affected_is hemophilia
+V name_is Victoria
+E name_is EdwardVII
+V1 name_is Victoria
+A name_is Alice
+L name_is Leopoid
+He name_is Helena
+B name_is Beatrice
+G5 name_is GeorgeV
+G6 name_is GeorgeVI
+H name_is Henry
+I name_is Irene
+F name_is Drederick
+A2 name_is Alexandra
+A3 name_is Alice
+V2 name_is Victoria
+L1 name_is Leopold
+M1 name_is Maurice
+W1 name_is Waldemar
+H1 name_is Henry
+A4 name_is Alexis
+L2 name_is Viscount
+A6 name_is Alfonso
+G name_is Gonzalo
+F ad_is "DA 3"
+G6 ad_is "Normal in offspring"
+W1 ad_is "DA 56"
+H1 ad_is "DA 4"
+A4 ad_is "murdered"
+L2 ad_is "Da 20"
+
+
+
+
+
+

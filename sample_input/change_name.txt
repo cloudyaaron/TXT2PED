@@ -1,6 +1,0 @@
-A father_of C,D,E
-B mother_of C,D,E
-D brother_of C
-D brother_of E
-E brother_of C
-C change_node_name bro

@@ -12,8 +12,9 @@ E father_of R
 S mother_of R
 F,I,J,L,P gender_is male
 G,N,O,R gender_is female
-gm,gp deceased_is true
-gp,C,A,D,F,G,I affected_is true
+gp,A,G,F,I,C,D,P affected_is true
+
+
 
 
 
