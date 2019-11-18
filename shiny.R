@@ -17,7 +17,7 @@ ui <- fillPage(
   padding = 5,
   theme = shinytheme("yeti"),
   #shinythemes::themeSelector(),
-  div(style="text-align: center; padding-bottom:5px;", titlePanel("TXT2PED")),
+  #div(style="text-align: center; padding-bottom:5px;", titlePanel("TXT2PED")),
   tags$head(tags$script(HTML("
         // Enable navigation prompt
         window.onbeforeunload = function() {
@@ -30,14 +30,14 @@ ui <- fillPage(
       div(style="display:inline-block;width:45%;text-align: center;", downloadButton(outputId = 'newbutton',label = 'New FILE', width = '200px')),
       div(style="display:inline-block;width:53%;text-align: center;", downloadButton ( outputId =  'savebutton',label = 'Save FILE')),
       hr(),
-      fileInput("file1", "Load input text File", accept = c(".txt"),buttonLabel = "Current File"),
+      fileInput("file1", "Load Input Text File", accept = c(".txt"),buttonLabel = "Current File"),
       div(style="display:inline-block;width:99%;text-align: center;", helpText("Find input format at:","https://github.com/cloudyaaron/6112project/")),
       hr(),
-      textAreaInput('inputbox','Command',height = '1.5cm'),
+      textAreaInput('inputbox','Command',height = '2.5cm'),
       hr(),
-      textAreaInput('console','Console',height = '2cm'),
+      textAreaInput('console','Console',height = '3cm'),
       hr(),
-      div(style="display:inline-block;width:99%;text-align: center;", actionButton(inputId = 'generatebutton',label = 'generate graph', icon = icon("refresh"), align="center")),
+      div(style="display:inline-block;width:99%;text-align: center;", actionButton(inputId = 'generatebutton',label = 'Generate Graph', icon = icon("refresh"), align="center")),
       
 
       
@@ -48,19 +48,19 @@ ui <- fillPage(
     mainPanel(
       fluidRow(
         column(3, offset = 0,
-          div(style="text-align: center; width: 200px", sliderInput('distance','Node Distance',min = 0.01,max = 2,value = 0.7))
+          div(style="text-align: center; width: 200px; padding-top: 10px", sliderInput('distance','Node Distance',min = 0.01,max = 2,value = 0.7))
         ),
 
         column(3, offset = 0,
-          div(style="text-align: center; width: 200px", sliderInput('size','Legend Size',min = 0.001,max = 0.5,value = 0.05))
+          div(style="text-align: center; width: 200px; padding-top: 10px", sliderInput('size','Legend Size',min = 0.001,max = 0.5,value = 0.05))
         ),
 
         column(3, offset = 0,
-          div(style="text-align: center; width: 200px;", selectizeInput(inputId = "legendPosition",'Legend position', choices = c("Top right" = "topright",  "Top left" = "topleft", "Bottom right" = "bottomright", "Bottom left" = "bottomleft")))
+          div(style="text-align: center; width: 200px; padding-top: 10px", selectizeInput(inputId = "legendPosition",'Legend Position', choices = c("Top right" = "topright",  "Top left" = "topleft", "Bottom right" = "bottomright", "Bottom left" = "bottomleft")))
         ),
 
         column(3, offset = 0,              
-          div(style="text-align: center; padding-right: 15px", checkboxGroupInput("variable", "Variables to show:",
+          div(style="text-align: center; padding-right: 15px; padding-top: 10px", checkboxGroupInput("variable", "Variables to show:",
                                                 c("ID" = "id",
                                                   "Real name" = "name",
                                                   "Date of birth" = "dob",
@@ -68,8 +68,9 @@ ui <- fillPage(
                                                   "Addtional Text" = "ad"), inline = TRUE)))
       ),
       hr(),
-      div(style="padding-left: 100px", imageOutput("image")),
-      div(style="text-align: center; padding-left: 800px", downloadButton('exportbutton', 'Export Pedigree File')),
+      #img(src='txt2ped.jpg', height = "15%", width = "15%"),
+      div(style="padding-left: 150px", imageOutput("image")),
+      div(style="text-align: center; padding-left: 800px; padding-top: 90px", downloadButton('exportbutton', 'Export Pedigree File')),
       
       width = 9
     ),
