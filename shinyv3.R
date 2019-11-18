@@ -58,21 +58,21 @@ ui <- fillPage(
         column(3, offset = 0,
           div(style="text-align: center; width: 200px; padding-top: 15px", selectizeInput(inputId = "legendPosition",'Legend Position', choices = c("Top right" = "topright",  "Top left" = "topleft", "Bottom right" = "bottomright", "Bottom left" = "bottomleft")))
         ),
-        column(3, offset = 0,
+        column(2, offset = 0,
           div(style="text-align: center; padding-top: 35px", downloadButton('exportbutton', 'Export Pedigree File'))
         )
       ),
       hr(),
       fluidRow(
-        column(3, offset = 9,
-          div(style="text-align: center;", checkboxGroupInput("variable", "Variables to show:",
+        column(2, offset = 9,
+          div(style="text-align: center; padding-left: 60px", checkboxGroupInput("variable", "Variables to show:",
                                                 c("ID" = "id",
                                                   "Real name" = "name",
                                                   "Date of birth" = "dob",
                                                   "Affected" = "affect",
                                                   "Addtional Text" = "ad")))
         ),
-        column(3, offset = 0,
+        column(9, offset = 0,
           div(style="padding-left: 150px", imageOutput("image"))
         )
       ), 
