@@ -56,27 +56,21 @@ ui <- fillPage(
         ),
 
         column(3, offset = 0,
-          div(style="text-align: center; width: 200px; padding-top: 15px", selectizeInput(inputId = "legendPosition",'Legend Position', choices = c("Top right" = "topright",  "Top left" = "topleft", "Bottom right" = "bottomright", "Bottom left" = "bottomleft")))
+          div(style="text-align: center; width: 200px; padding-top: 10px", selectizeInput(inputId = "legendPosition",'Legend Position', choices = c("Top right" = "topright",  "Top left" = "topleft", "Bottom right" = "bottomright", "Bottom left" = "bottomleft")))
         ),
-        column(2, offset = 0,
-          div(style="text-align: center; padding-top: 35px", downloadButton('exportbutton', 'Export Pedigree File'))
-        )
-      ),
-      hr(),
-      fluidRow(
-        column(2, offset = 9,
-          div(style="text-align: center; padding-left: 60px", checkboxGroupInput("variable", "Variables to show:",
+
+        column(3, offset = 0,              
+          div(style="text-align: center; padding-right: 15px; padding-top: 10px", checkboxGroupInput("variable", "Variables to show:",
                                                 c("ID" = "id",
                                                   "Real name" = "name",
                                                   "Date of birth" = "dob",
                                                   "Affected" = "affect",
-                                                  "Addtional Text" = "ad")))
-        ),
-        column(9, offset = 0,
-          div(style="padding-left: 150px", imageOutput("image"))
-        )
-      ), 
-      #div(style="text-align: center; padding-left: 800px; padding-top: 100px", downloadButton('exportbutton', 'Export Pedigree File')),
+                                                  "Addtional Text" = "ad"), inline = TRUE)))
+      ),
+      hr(),
+      #img(src='txt2ped.jpg', height = "15%", width = "15%"),
+      div(style="padding-left: 150px", imageOutput("image")),
+      div(style="text-align: center; padding-left: 800px; padding-top: 90px", downloadButton('exportbutton', 'Export Pedigree File')),
       
       width = 9
     ),
