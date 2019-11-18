@@ -5,7 +5,7 @@ library(dplyr)
 library(ggplot2)
 library(shinydashboard)
 library(leaflet)
-source("PedigreeEngine.R")
+source("./src/PedigreeEngine.R")
 if(!require(shinythemes)) install.packages("shinythemes")
 
 
@@ -15,9 +15,9 @@ if(!require(shinythemes)) install.packages("shinythemes")
 ui <- fillPage(
   shinyjs::useShinyjs(),
   padding = 5,
-  theme = shinytheme("yeti"),
-  #shinythemes::themeSelector(),
-  div(style="text-align: center; padding-bottom:5px;", titlePanel("TXT2PED")),
+  theme = shinytheme("journal"),
+  shinythemes::themeSelector(),
+  titlePanel("TXT2PED"),
   tags$head(tags$script(HTML("
         // Enable navigation prompt
         window.onbeforeunload = function() {
@@ -26,52 +26,49 @@ ui <- fillPage(
     "))),
   sidebarLayout(
     sidebarPanel(
-      #helpText("ZOOM out if needed\n"),
-      div(style="display:inline-block;width:45%;text-align: center;", downloadButton(outputId = 'newbutton',label = 'New FILE', width = '200px')),
-      div(style="display:inline-block;width:53%;text-align: center;", downloadButton ( outputId =  'savebutton',label = 'Save FILE')),
+      helpText("ZOOM out if needed\n"),
+      downloadButton(outputId = 'newbutton',label = 'New FILE', width = '200px'),
+      downloadButton ( outputId =  'savebutton',label = 'Save FILE'),
       hr(),
-      fileInput("file1", "Load input text File", accept = c(".txt"),buttonLabel = "Current File"),
-      div(style="display:inline-block;width:99%;text-align: center;", helpText("Find input format at:","https://github.com/cloudyaaron/6112project/")),
-      hr(),
-      textAreaInput('inputbox','Command',height = '1.5cm'),
-      hr(),
-      textAreaInput('console','Console',height = '2cm'),
-      hr(),
-      div(style="display:inline-block;width:99%;text-align: center;", actionButton(inputId = 'generatebutton',label = 'generate graph', icon = icon("refresh"), align="center")),
+      fileInput("file1", "Load input text File", accept = c(".txt"),buttonLabel = "You are working on"),
+      helpText("FIND input format on","https://github.com/cloudyaaron/6112project/"),
+      
+      textAreaInput('inputbox','command',height = '5cm'),
+      textAreaInput('console','console',height = '5cm'),
+      actionButton(inputId = 'generatebutton',label = 'generate graph', icon = icon("refresh")),
       
 
       
-      width = 3
+      width = 4
       
     ),
-    
     mainPanel(
       fluidRow(
-        column(3, offset = 0,
-          div(style="text-align: center; width: 200px", sliderInput('distance','Node Distance',min = 0.01,max = 2,value = 0.7))
+        column(3,
+          
+          sliderInput('distance','Distance between nodes',min = 0.01,max = 2,value = 0.7),
+          sliderInput('size','Legend size',min = 0.001,max = 0.5,value = 0.05)
         ),
 
-        column(3, offset = 0,
-          div(style="text-align: center; width: 200px", sliderInput('size','Legend Size',min = 0.001,max = 0.5,value = 0.05))
-        ),
+        column(3, style="padding-top:25px",
+               selectizeInput(inputId = "legendPosition",'Legend position', choices = c("Top right" = "topright",  "Top left" = "topleft", "Bottom right" = "bottomright", "Bottom left" = "bottomleft")),
+               hr(),
+               downloadButton('exportbutton', 'Export Pedigree file'),
+               
 
-        column(3, offset = 0,
-          div(style="text-align: center; width: 200px;", selectizeInput(inputId = "legendPosition",'Legend position', choices = c("Top right" = "topright",  "Top left" = "topleft", "Bottom right" = "bottomright", "Bottom left" = "bottomleft")))
-        ),
-
-        column(3, offset = 0,              
-          div(style="text-align: center; padding-right: 15px", checkboxGroupInput("variable", "Variables to show:",
-                                                c("ID" = "id",
-                                                  "Real name" = "name",
-                                                  "Date of birth" = "dob",
-                                                  "Affected" = "affect",
-                                                  "Addtional Text" = "ad"), inline = TRUE)))
+        ), 
+        column(3,               checkboxGroupInput("variable", "Variables to show:",
+                                                   c("ID" = "id",
+                                                     "Real name" = "name",
+                                                     "Date of birth" = "dob",
+                                                     "Affected" = "affect",
+                                                     "Addtional Text" = "ad"), inline = TRUE))
+        
       ),
       hr(),
       imageOutput("image"),
-      div(style="text-align: center; padding-left: 800px", downloadButton('exportbutton', 'Export Pedigree File')),
       
-      width = 9
+      width = 6
     ),
     
     fluid = TRUE
