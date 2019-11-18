@@ -63,14 +63,19 @@ ui <- fillPage(
         )
       ),
       hr(),
-      div(style="text-align: center; padding-left: 850px", checkboxGroupInput("variable", "Variables to show:",
+      fluidRow(
+        column(3, offset = 9,
+          div(style="text-align: center;", checkboxGroupInput("variable", "Variables to show:",
                                                 c("ID" = "id",
                                                   "Real name" = "name",
                                                   "Date of birth" = "dob",
                                                   "Affected" = "affect",
-                                                  "Addtional Text" = "ad"))),
-        
-      div(style="padding-left: 150px", imageOutput("image")),
+                                                  "Addtional Text" = "ad")))
+        ),
+        column(3, offset = 0,
+          div(style="padding-left: 150px", imageOutput("image"))
+        )
+      ), 
       #div(style="text-align: center; padding-left: 800px; padding-top: 100px", downloadButton('exportbutton', 'Export Pedigree File')),
       
       width = 9
