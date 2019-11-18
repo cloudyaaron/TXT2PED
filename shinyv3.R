@@ -48,28 +48,30 @@ ui <- fillPage(
     mainPanel(
       fluidRow(
         column(3, offset = 0,
-          div(style="text-align: center; width: 200px", sliderInput('distance','Node Distance',min = 0.01,max = 2,value = 0.7))
+          div(style="text-align: center; width: 200px; padding-top: 10px", sliderInput('distance','Node Distance',min = 0.01,max = 2,value = 0.7))
         ),
 
         column(3, offset = 0,
-          div(style="text-align: center; width: 200px", sliderInput('size','Legend Size',min = 0.001,max = 0.5,value = 0.05))
+          div(style="text-align: center; width: 200px; padding-top: 10px", sliderInput('size','Legend Size',min = 0.001,max = 0.5,value = 0.05))
         ),
 
         column(3, offset = 0,
-          div(style="text-align: center; width: 200px;", selectizeInput(inputId = "legendPosition",'Legend Position', choices = c("Top right" = "topright",  "Top left" = "topleft", "Bottom right" = "bottomright", "Bottom left" = "bottomleft")))
+          div(style="text-align: center; width: 200px; padding-top: 15px", selectizeInput(inputId = "legendPosition",'Legend Position', choices = c("Top right" = "topright",  "Top left" = "topleft", "Bottom right" = "bottomright", "Bottom left" = "bottomleft")))
         ),
-
-        column(3, offset = 0,              
-          div(style="text-align: center; padding-right: 15px", checkboxGroupInput("variable", "Variables to show:",
+        column(3, offset = 0,
+          div(style="text-align: center; padding-top: 35px", downloadButton('exportbutton', 'Export Pedigree File'))
+        )
+      ),
+      hr(),
+      div(style="text-align: center; padding-left: 850px", checkboxGroupInput("variable", "Variables to show:",
                                                 c("ID" = "id",
                                                   "Real name" = "name",
                                                   "Date of birth" = "dob",
                                                   "Affected" = "affect",
-                                                  "Addtional Text" = "ad"), inline = TRUE)))
-      ),
-      hr(),
+                                                  "Addtional Text" = "ad"))),
+        
       div(style="padding-left: 150px", imageOutput("image")),
-      div(style="text-align: center; padding-left: 800px; padding-top: 100px", downloadButton('exportbutton', 'Export Pedigree File')),
+      #div(style="text-align: center; padding-left: 800px; padding-top: 100px", downloadButton('exportbutton', 'Export Pedigree File')),
       
       width = 9
     ),
