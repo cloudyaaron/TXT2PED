@@ -68,7 +68,7 @@ ui <- fillPage(
                                                   "Addtional Text" = "ad"), inline = TRUE)))
       ),
       hr(),
-      div(style="padding-left: 100px", imageOutput("image")),
+      div(style="padding-left: 150px", imageOutput("image")),
       div(style="text-align: center; padding-left: 800px", downloadButton('exportbutton', 'Export Pedigree File')),
       
       width = 9
